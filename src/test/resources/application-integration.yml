@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:tc:mysql:8.0.39:///
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
