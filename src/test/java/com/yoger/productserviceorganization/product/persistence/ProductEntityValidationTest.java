@@ -30,7 +30,7 @@ public class ProductEntityValidationTest {
                 "{100, 15000}",
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -45,7 +45,7 @@ public class ProductEntityValidationTest {
                 "{100, 15000}",
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -61,7 +61,7 @@ public class ProductEntityValidationTest {
                 "{100, 15000}",
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -77,7 +77,7 @@ public class ProductEntityValidationTest {
                 "{100, 15000}",
                 "짧음",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -93,7 +93,7 @@ public class ProductEntityValidationTest {
                 "{100, 15000}",
                 "상품에 대한 설명입니다.",
                 "https://invalid-url.com/image.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);

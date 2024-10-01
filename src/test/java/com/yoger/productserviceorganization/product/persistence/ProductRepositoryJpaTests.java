@@ -38,14 +38,14 @@ public class ProductRepositoryJpaTests {
                 "{100, 15000}",
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
         ProductEntity productEntity2 = ProductEntity.of(
                 "유효한상품이름2",
                 "{100, 15000}",
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
         productRepository.save(productEntity1);
         productRepository.save(productEntity2);
@@ -80,23 +80,23 @@ public class ProductRepositoryJpaTests {
         return Stream.of(
                 // name 유효성 검증 실패 케이스
                 Arguments.of("짧", "상품에 대한 설명입니다.", "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                        ProductState.FINISHED, "상품 이름은 2글자 이상 50글자 이하만 가능합니다."),
+                        ProductState.SELLABLE, "상품 이름은 2글자 이상 50글자 이하만 가능합니다."),
                 Arguments.of("이름이 너무너무 길어요".repeat(10), "상품에 대한 설명입니다.",
-                        "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg", ProductState.FINISHED,
+                        "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg", ProductState.SELLABLE,
                         "상품 이름은 2글자 이상 50글자 이하만 가능합니다."),
                 Arguments.of("이름에 허용하지 않은 특수부호 #", "상품에 대한 설명입니다.",
-                        "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg", ProductState.FINISHED,
+                        "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg", ProductState.SELLABLE,
                         "상품 이름은 한글, 영어, 숫자, '-', '_' 만 사용할 수 있습니다."),
 
                 // description 유효성 검증 실패 케이스
                 Arguments.of("정상 이름", "짧", "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                        ProductState.FINISHED, "상품 상세 설명은 10글자 이상 500글자 이하만 가능합니다."),
+                        ProductState.SELLABLE, "상품 상세 설명은 10글자 이상 500글자 이하만 가능합니다."),
                 Arguments.of("정상 이름", "상품 설명이 너무 길어요".repeat(100),
-                        "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg", ProductState.FINISHED,
+                        "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg", ProductState.SELLABLE,
                         "상품 상세 설명은 10글자 이상 500글자 이하만 가능합니다."),
 
                 // imageUrl 유효성 검증 실패 케이스
-                Arguments.of("정상 이름", "상품에 대한 설명입니다.", "https://wrong-url.com/myimage.jpg", ProductState.FINISHED,
+                Arguments.of("정상 이름", "상품에 대한 설명입니다.", "https://wrong-url.com/myimage.jpg", ProductState.SELLABLE,
                         "유효한 S3 URL 형식이어야 합니다."),
 
                 // state 유효성 검증 실패 케이스
