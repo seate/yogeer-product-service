@@ -35,14 +35,14 @@ public class ProductRepositoryJpaTests {
     void findAllProducts() {
         ProductEntity productEntity1 = ProductEntity.of(
                 "유효한상품이름1",
-                "{100, 15000}",
+                "[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]",
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
                 ProductState.SELLABLE
         );
         ProductEntity productEntity2 = ProductEntity.of(
                 "유효한상품이름2",
-                "{100, 15000}",
+                "[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]",
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
                 ProductState.SELLABLE
@@ -64,7 +64,7 @@ public class ProductRepositoryJpaTests {
     void productValidationFailTest(String name, String description, String imageUrl, ProductState state, String expectedMessage) {
         ProductEntity productEntity = ProductEntity.of(
                 name,
-                "{100, 15000}",
+                "[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]",
                 description,
                 imageUrl,
                 state
