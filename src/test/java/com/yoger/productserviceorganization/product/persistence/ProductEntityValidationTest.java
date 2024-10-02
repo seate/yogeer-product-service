@@ -27,10 +27,10 @@ public class ProductEntityValidationTest {
     void validProductEntityCreation() {
         ProductEntity productEntity = ProductEntity.of(
                 "유효한상품이름",
-                "{100, 15000}",
+                "[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]",
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -42,10 +42,10 @@ public class ProductEntityValidationTest {
     void productNameTooShort() {
         ProductEntity productEntity = ProductEntity.of(
                 "짧",
-                "{100, 15000}",
+                "[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]",
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -58,10 +58,10 @@ public class ProductEntityValidationTest {
     void productNameWithInvalidCharacters() {
         ProductEntity productEntity = ProductEntity.of(
                 "잘못된#상품이름!",
-                "{100, 15000}",
+                "[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]",
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -74,10 +74,10 @@ public class ProductEntityValidationTest {
     void productDescriptionTooShort() {
         ProductEntity productEntity = ProductEntity.of(
                 "유효한상품이름",
-                "{100, 15000}",
+                "[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]",
                 "짧음",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -90,10 +90,10 @@ public class ProductEntityValidationTest {
     void productInvalidS3Url() {
         ProductEntity productEntity = ProductEntity.of(
                 "유효한상품이름",
-                "{100, 15000}",
+                "[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]",
                 "상품에 대한 설명입니다.",
                 "https://invalid-url.com/image.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -106,7 +106,7 @@ public class ProductEntityValidationTest {
     void productStateNull() {
         ProductEntity productEntity = ProductEntity.of(
                 "유효한상품이름",
-                "{100, 15000}",
+                "[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]",
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
                 null
