@@ -4,6 +4,7 @@ import com.yoger.productserviceorganization.proruct.domain.ProductState;
 import com.yoger.productserviceorganization.proruct.persistence.ProductEntity;
 
 public record SellableProductResponseDTO(
+        Long id,
         String name,
         String priceByQuantity,
         String description,
@@ -12,6 +13,7 @@ public record SellableProductResponseDTO(
 ) {
     public static SellableProductResponseDTO from(ProductEntity productEntity) {
         return new SellableProductResponseDTO(
+                productEntity.getId(),
                 productEntity.getName(),
                 productEntity.getPriceByQuantity(),
                 productEntity.getDescription(),
