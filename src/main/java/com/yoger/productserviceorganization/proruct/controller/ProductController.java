@@ -31,4 +31,9 @@ public class ProductController {
     public DemoProductResponseDTO saveDemo(@Valid @ModelAttribute DemoProductRequestDTO demoProductRequestDTO) {
         return productService.saveDemoProduct(demoProductRequestDTO);
     }
+
+    @GetMapping("/demo")
+    public List<DemoProductResponseDTO> getDemoProducts() {
+        return productService.viewDemoProducts();
+    }
 }

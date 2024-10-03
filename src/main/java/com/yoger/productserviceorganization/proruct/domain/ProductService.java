@@ -34,4 +34,15 @@ public class ProductService {
         productRepository.save(productEntity);
         return DemoProductResponseDTO.from(productEntity);
     }
+
+    public List<DemoProductResponseDTO> viewDemoProducts() {
+        return productRepository.findAll().stream()
+                .filter(productEntity -> productEntity.getState()==ProductState.DEMO)
+                .map(this::mapToDemoDTO)
+                .toList();
+    }
+
+    private DemoProductResponseDTO mapToDemoDTO(ProductEntity productEntity) {
+        return DemoProductResponseDTO.from(productEntity);
+    }
 }
