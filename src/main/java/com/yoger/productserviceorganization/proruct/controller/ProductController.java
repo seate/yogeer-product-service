@@ -7,10 +7,12 @@ import com.yoger.productserviceorganization.proruct.dto.response.SellableProduct
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -25,6 +27,7 @@ public class ProductController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public DemoProductResponseDTO saveDemo(@Valid @ModelAttribute DemoProductRequestDTO demoProductRequestDTO) {
         return productService.saveDemoProduct(demoProductRequestDTO);
     }
