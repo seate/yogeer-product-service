@@ -6,6 +6,7 @@ import com.yoger.productserviceorganization.proruct.domain.ProductState;
 import com.yoger.productserviceorganization.proruct.domain.S3Service;
 import com.yoger.productserviceorganization.proruct.dto.response.DemoProductResponseDTO;
 import java.io.IOException;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,5 +75,36 @@ class ProductServiceOrganizationApplicationTests {
         assertThat(demoProductResponseDTO.description()).isEqualTo("This is a test product description");
         assertThat(demoProductResponseDTO.imageUrl()).matches(expectedImageUrlPattern);
         assertThat(demoProductResponseDTO.state()).isEqualTo(ProductState.DEMO);
+    }
+
+    @Test
+    void whenDemoGetRequestThenDemoListReturned() {
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("name", "Test Product");
+        builder.part("description", "This is a test product description");
+        builder.part("image", new ClassPathResource("test-image.jpeg"))
+                .filename("test-image.jpeg")
+                .contentType(MediaType.IMAGE_JPEG);
+
+        DemoProductResponseDTO demoProductResponseDTO = webTestClient.post()
+                .uri("/api/products")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(DemoProductResponseDTO.class)  // DTO로 응답 본문을 매핑
+                .returnResult()
+                .getResponseBody();
+
+        List<DemoProductResponseDTO> demoProductResponseDTOs = webTestClient.get()
+                .uri("/api/products/demo")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(DemoProductResponseDTO.class)  // body를 List로 매핑
+                .returnResult()
+                .getResponseBody();
+
+        assertThat(demoProductResponseDTOs.size()).isEqualTo(1);
+        assertThat(demoProductResponseDTOs.get(0)).isEqualTo(demoProductResponseDTO);
     }
 }
