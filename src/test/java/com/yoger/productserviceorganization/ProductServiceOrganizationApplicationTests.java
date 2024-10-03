@@ -50,16 +50,18 @@ class ProductServiceOrganizationApplicationTests {
         s3TestClient.createBucket(CreateBucketRequest.builder().bucket(bucketName).build());
     }
 
-    @Test
-    void whenPostRequestThenProductCreated() throws IOException {
+    private MultipartBodyBuilder getTestBodyBuilder() {
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("name", "Test Product");
         builder.part("description", "This is a test product description");
         builder.part("image", new ClassPathResource("test-image.jpeg"))
                 .filename("test-image.jpeg")
                 .contentType(MediaType.IMAGE_JPEG);
+        return builder;
+    }
 
-        DemoProductResponseDTO demoProductResponseDTO = webTestClient.post()
+    private DemoProductResponseDTO makeDemoTestProduct(MultipartBodyBuilder builder) {
+        return webTestClient.post()
                 .uri("/api/products")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(builder.build()))
@@ -68,6 +70,13 @@ class ProductServiceOrganizationApplicationTests {
                 .expectBody(DemoProductResponseDTO.class)  // DTO로 응답 본문을 매핑
                 .returnResult()
                 .getResponseBody();
+    }
+
+    @Test
+    void whenPostRequestThenProductCreated() throws IOException {
+        MultipartBodyBuilder builder = getTestBodyBuilder();
+
+        DemoProductResponseDTO demoProductResponseDTO = makeDemoTestProduct(builder);
 
         String expectedImageUrlPattern = "https://test-integration-bucket\\.s3\\.ap-northeast-2\\.amazonaws\\.com/[a-f0-9\\-]+_test-image\\.jpeg";
 
@@ -79,22 +88,9 @@ class ProductServiceOrganizationApplicationTests {
 
     @Test
     void whenDemoGetRequestThenDemoListReturned() {
-        MultipartBodyBuilder builder = new MultipartBodyBuilder();
-        builder.part("name", "Test Product");
-        builder.part("description", "This is a test product description");
-        builder.part("image", new ClassPathResource("test-image.jpeg"))
-                .filename("test-image.jpeg")
-                .contentType(MediaType.IMAGE_JPEG);
+        MultipartBodyBuilder builder = getTestBodyBuilder();
 
-        DemoProductResponseDTO demoProductResponseDTO = webTestClient.post()
-                .uri("/api/products")
-                .contentType(MediaType.MULTIPART_FORM_DATA)
-                .body(BodyInserters.fromMultipartData(builder.build()))
-                .exchange()
-                .expectStatus().isCreated()
-                .expectBody(DemoProductResponseDTO.class)  // DTO로 응답 본문을 매핑
-                .returnResult()
-                .getResponseBody();
+        DemoProductResponseDTO demoProductResponseDTO = makeDemoTestProduct(builder);
 
         List<DemoProductResponseDTO> demoProductResponseDTOs = webTestClient.get()
                 .uri("/api/products/demo")
