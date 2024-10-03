@@ -45,6 +45,7 @@ dependencies {
     // TestContainers
     testImplementation 'org.testcontainers:junit-jupiter'
     testImplementation 'org.testcontainers:mysql'
+    implementation 'org.testcontainers:localstack'
 }
 
 tasks.named('test') {
