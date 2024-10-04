@@ -19,8 +19,7 @@ public class ProductService {
     private final S3Service s3Service;
 
     public List<SellableProductResponseDTO> viewSellableProducts() {
-        return productRepository.findAll().stream()
-                .filter(productEntity -> productEntity.getState() == ProductState.SELLABLE)
+        return productRepository.findByState(ProductState.SELLABLE).stream()
                 .map(this::mapToSellableDTO)
                 .toList();
     }
@@ -37,8 +36,7 @@ public class ProductService {
     }
 
     public List<DemoProductResponseDTO> viewDemoProducts() {
-        return productRepository.findAll().stream()
-                .filter(productEntity -> productEntity.getState()==ProductState.DEMO)
+        return productRepository.findByState(ProductState.DEMO).stream()
                 .map(this::mapToDemoDTO)
                 .toList();
     }
