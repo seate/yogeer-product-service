@@ -9,7 +9,6 @@ import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
 import com.yoger.productserviceorganization.proruct.dto.response.SellableProductResponseDTO;
 import com.yoger.productserviceorganization.proruct.persistence.ProductEntity;
 import com.yoger.productserviceorganization.proruct.persistence.ProductRepository;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,21 +45,7 @@ public class ProductServiceTests {
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
                 ProductState.SELLABLE
         );
-        ProductEntity demoProduct = ProductEntity.of(
-                "유효한 데모 상품",
-                null,
-                "상품에 대한 설명입니다.",
-                "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.DEMO
-        );
-        ProductEntity saleEndedProduct = ProductEntity.of(
-                "유효한 판매 끝난 상품",
-                priceByQuantities,
-                "상품에 대한 설명입니다.",
-                "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.SALE_ENDED
-        );
-        given(productRepository.findAll()).willReturn(Arrays.asList(sellableProduct, demoProduct, saleEndedProduct));
+        given(productRepository.findByState(ProductState.SELLABLE)).willReturn(List.of(sellableProduct));
 
         // When
         List<SellableProductResponseDTO> result = productService.viewSellableProducts();
