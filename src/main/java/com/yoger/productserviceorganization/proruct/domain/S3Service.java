@@ -19,6 +19,9 @@ public class S3Service {
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
+    @Value("${cloud.aws.s3.region}")
+    private String region;
+
     public String uploadImage(MultipartFile image) {
         String fileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
         try {
@@ -31,7 +34,7 @@ public class S3Service {
 
             s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(image.getInputStream(), image.getSize()));
 
-            return String.format("https://%s.s3.ap-northeast-2.amazonaws.com/%s", bucketName, fileName);
+            return String.format("https://%s.s3.%s.amazonaws.com/%s", bucketName, region, fileName);
         } catch (S3Exception e) {
             throw new RuntimeException("S3에 파일 업로드 중 오류 발생: " + e.getMessage(), e);
         } catch (IOException e) {
