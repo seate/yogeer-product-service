@@ -4,12 +4,14 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 import com.yoger.productserviceorganization.proruct.domain.ProductService;
+import com.yoger.productserviceorganization.proruct.domain.model.PriceByQuantity;
 import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
 import com.yoger.productserviceorganization.proruct.dto.response.SellableProductResponseDTO;
 import com.yoger.productserviceorganization.proruct.persistence.ProductEntity;
 import com.yoger.productserviceorganization.proruct.persistence.ProductRepository;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,11 +26,22 @@ public class ProductServiceTests {
     @Mock
     private ProductRepository productRepository; // 목 객체
 
+    private List<PriceByQuantity> priceByQuantities;
+
+    @BeforeEach
+    void setUp() {
+        priceByQuantities = List.of(
+                new PriceByQuantity(100, 10000)
+                , new PriceByQuantity(1000, 8500)
+                , new PriceByQuantity(10000, 7500)
+        );
+    }
+
     @Test
     void viewSellableProducts_ReturnsSellableProducts() {
         ProductEntity sellableProduct = ProductEntity.of(
                 "유효한 상품",
-                "[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]",
+                priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
                 ProductState.SELLABLE
@@ -42,7 +55,7 @@ public class ProductServiceTests {
         );
         ProductEntity saleEndedProduct = ProductEntity.of(
                 "유효한 판매 끝난 상품",
-                "[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]",
+                priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
                 ProductState.SALE_ENDED
@@ -56,6 +69,6 @@ public class ProductServiceTests {
         assertThat(result).hasSize(1);
         assertThat(result.get(0).name()).isEqualTo("유효한 상품");
         assertThat(result.get(0).state()).isEqualTo(ProductState.SELLABLE);
-        assertThat(result.get(0).priceByQuantity()).isEqualTo("[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]");
+        assertThat(result.get(0).priceByQuantities()).isEqualTo(priceByQuantities);
     }
 }

@@ -3,6 +3,7 @@ package com.yoger.productserviceorganization.product.persistence;
 import static org.assertj.core.api.Assertions.*;
 
 import com.yoger.productserviceorganization.proruct.config.DataConfig;
+import com.yoger.productserviceorganization.proruct.domain.model.PriceByQuantity;
 import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
 import com.yoger.productserviceorganization.proruct.persistence.ProductEntity;
 import com.yoger.productserviceorganization.proruct.persistence.ProductRepository;
@@ -10,6 +11,7 @@ import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,19 +32,30 @@ public class ProductRepositoryJpaTests {
     @Autowired
     private ProductRepository productRepository;
 
+    private List<PriceByQuantity> priceByQuantities;
+
+    @BeforeEach
+    void setUp() {
+        priceByQuantities = List.of(
+                new PriceByQuantity(100, 10000)
+                ,new PriceByQuantity(1000, 8500)
+                ,new PriceByQuantity(10000, 7500)
+        );
+    }
+
     @Test
     @DisplayName("상품들이 정상적으로 저장되었는 지 테스트")
     void findAllProducts() {
         ProductEntity productEntity1 = ProductEntity.of(
                 "유효한상품이름1",
-                "[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]",
+                priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
                 ProductState.SELLABLE
         );
         ProductEntity productEntity2 = ProductEntity.of(
                 "유효한상품이름2",
-                "[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]",
+                priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
                 ProductState.SELLABLE
@@ -64,7 +77,7 @@ public class ProductRepositoryJpaTests {
     void productValidationFailTest(String name, String description, String imageUrl, ProductState state, String expectedMessage) {
         ProductEntity productEntity = ProductEntity.of(
                 name,
-                "[{\"quantity\": 100, \"price\": 10000}, {\"quantity\": 1000, \"price\": 8500}]",
+                priceByQuantities,
                 description,
                 imageUrl,
                 state
