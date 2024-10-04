@@ -1,7 +1,10 @@
 package com.yoger.productserviceorganization.proruct.persistence;
 
+import com.yoger.productserviceorganization.proruct.domain.model.PriceByQuantity;
 import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
@@ -14,9 +17,11 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -40,7 +45,9 @@ public class ProductEntity {
     private String name;
 
     @Nullable
-    private String priceByQuantity;
+    @Type(JsonType.class)
+    @Column(columnDefinition = "json")
+    private List<PriceByQuantity> priceByQuantities;
 
     @NotBlank(message = "상품에 대한 설명을 적어주세요.")
     @Size(min = 10, max = 500, message = "상품 상세 설명은 10글자 이상 500글자 이하만 가능합니다.")
@@ -68,8 +75,8 @@ public class ProductEntity {
      * Product의 경우에는 다수의 사용자가 동일한 상품을 수정하는 경우는
      * 존재하지 않기 때문에 작성하지 않음
      */
-    public static ProductEntity of(String name, String priceByQuantity, String description, String imageUrl,
+    public static ProductEntity of(String name, List<PriceByQuantity> priceByQuantities, String description, String imageUrl,
                                    ProductState state) {
-        return new ProductEntity(null, name, priceByQuantity, description, imageUrl, state, null, null);
+        return new ProductEntity(null, name, priceByQuantities, description, imageUrl, state, null, null);
     }
 }
