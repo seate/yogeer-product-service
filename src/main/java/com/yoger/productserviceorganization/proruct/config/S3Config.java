@@ -1,6 +1,5 @@
 package com.yoger.productserviceorganization.proruct.config;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -12,21 +11,18 @@ import software.amazon.awssdk.services.s3.S3Client;
 @Configuration
 @Profile("!integration")  // 테스트 환경에서 제외
 public class S3Config {
+    private final AwsProperties awsProperties;
 
-    @Value("${cloud.aws.s3.region}")
-    private String region;
-
-    @Value("${cloud.aws.credentials.access-key}")
-    private String accessKey;
-
-    @Value("${cloud.aws.credentials.secret-key}")
-    private String secretKey;
+    public S3Config(AwsProperties awsProperties) {
+        this.awsProperties = awsProperties;
+    }
 
     @Bean
     public S3Client s3Client() {
-        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(accessKey, secretKey);
+        AwsBasicCredentials awsCredentials = AwsBasicCredentials
+                .create(awsProperties.accessKey(), awsProperties.secretKey());
         return S3Client.builder()
-                .region(Region.of(region))
+                .region(Region.of(awsProperties.region()))
                 .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
                 .build();
     }
