@@ -2,12 +2,14 @@ package com.yoger.productserviceorganization.product.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.yoger.productserviceorganization.proruct.domain.ProductState;
+import com.yoger.productserviceorganization.proruct.domain.model.PriceByQuantity;
+import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
 import com.yoger.productserviceorganization.proruct.persistence.ProductEntity;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
+import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,10 +18,17 @@ import org.junit.jupiter.api.Test;
 public class ProductEntityValidationTest {
     private Validator validator;
 
+    private List<PriceByQuantity> priceByQuantities;
+
     @BeforeEach
     void setUp() {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
+        priceByQuantities = List.of(
+                new PriceByQuantity(100, 10000)
+                , new PriceByQuantity(1000, 8500)
+                , new PriceByQuantity(10000, 7500)
+        );
     }
 
     @Test
@@ -27,10 +36,10 @@ public class ProductEntityValidationTest {
     void validProductEntityCreation() {
         ProductEntity productEntity = ProductEntity.of(
                 "유효한상품이름",
-                "{100, 15000}",
+                priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -42,10 +51,10 @@ public class ProductEntityValidationTest {
     void productNameTooShort() {
         ProductEntity productEntity = ProductEntity.of(
                 "짧",
-                "{100, 15000}",
+                priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -58,10 +67,10 @@ public class ProductEntityValidationTest {
     void productNameWithInvalidCharacters() {
         ProductEntity productEntity = ProductEntity.of(
                 "잘못된#상품이름!",
-                "{100, 15000}",
+                priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -74,10 +83,10 @@ public class ProductEntityValidationTest {
     void productDescriptionTooShort() {
         ProductEntity productEntity = ProductEntity.of(
                 "유효한상품이름",
-                "{100, 15000}",
+                priceByQuantities,
                 "짧음",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -90,10 +99,10 @@ public class ProductEntityValidationTest {
     void productInvalidS3Url() {
         ProductEntity productEntity = ProductEntity.of(
                 "유효한상품이름",
-                "{100, 15000}",
+                priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://invalid-url.com/image.jpg",
-                ProductState.FINISHED
+                ProductState.SELLABLE
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -106,7 +115,7 @@ public class ProductEntityValidationTest {
     void productStateNull() {
         ProductEntity productEntity = ProductEntity.of(
                 "유효한상품이름",
-                "{100, 15000}",
+                priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
                 null
