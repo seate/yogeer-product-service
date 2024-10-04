@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
 import com.yoger.productserviceorganization.proruct.domain.ProductService;
-import com.yoger.productserviceorganization.proruct.domain.ProductState;
+import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
 import com.yoger.productserviceorganization.proruct.dto.response.SellableProductResponseDTO;
 import com.yoger.productserviceorganization.proruct.persistence.ProductEntity;
 import com.yoger.productserviceorganization.proruct.persistence.ProductRepository;

@@ -1,6 +1,6 @@
 package com.yoger.productserviceorganization.proruct.dto.response;
 
-import com.yoger.productserviceorganization.proruct.domain.ProductState;
+import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
 import com.yoger.productserviceorganization.proruct.persistence.ProductEntity;
 
 public record DemoProductResponseDTO(

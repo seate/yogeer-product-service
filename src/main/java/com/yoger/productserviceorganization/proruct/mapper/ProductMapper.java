@@ -1,6 +1,6 @@
 package com.yoger.productserviceorganization.proruct.mapper;
 
-import com.yoger.productserviceorganization.proruct.domain.ProductState;
+import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
 import com.yoger.productserviceorganization.proruct.dto.request.DemoProductRequestDTO;
 import com.yoger.productserviceorganization.proruct.persistence.ProductEntity;
 

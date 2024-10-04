@@ -1,5 +1,6 @@
 package com.yoger.productserviceorganization.proruct.domain;
 
+import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
 import com.yoger.productserviceorganization.proruct.dto.request.DemoProductRequestDTO;
 import com.yoger.productserviceorganization.proruct.dto.response.DemoProductResponseDTO;
 import com.yoger.productserviceorganization.proruct.dto.response.SellableProductResponseDTO;

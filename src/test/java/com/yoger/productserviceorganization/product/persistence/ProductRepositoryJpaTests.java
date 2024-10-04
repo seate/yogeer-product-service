@@ -3,7 +3,7 @@ package com.yoger.productserviceorganization.product.persistence;
 import static org.assertj.core.api.Assertions.*;
 
 import com.yoger.productserviceorganization.proruct.config.DataConfig;
-import com.yoger.productserviceorganization.proruct.domain.ProductState;
+import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
 import com.yoger.productserviceorganization.proruct.persistence.ProductEntity;
 import com.yoger.productserviceorganization.proruct.persistence.ProductRepository;
 import jakarta.validation.ConstraintViolationException;

@@ -1,6 +1,6 @@
 package com.yoger.productserviceorganization.proruct.persistence;
 
-import com.yoger.productserviceorganization.proruct.domain.ProductState;
+import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
