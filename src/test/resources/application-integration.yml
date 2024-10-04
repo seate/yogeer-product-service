@@ -1,3 +1,11 @@
 spring:
   datasource:
     url: jdbc:tc:mysql:8.0.39:///
+
+cloud:
+  aws:
+    s3:
+      region: ap-northeast-2
+      bucket: test-bucket
+      access-key: test-access-key
+      secret-key: test-secret-key
