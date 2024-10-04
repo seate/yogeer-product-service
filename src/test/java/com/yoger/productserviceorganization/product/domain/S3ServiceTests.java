@@ -3,6 +3,7 @@ package com.yoger.productserviceorganization.product.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.yoger.productserviceorganization.LocalStackS3Config;
+import com.yoger.productserviceorganization.proruct.config.AwsProperties;
 import com.yoger.productserviceorganization.proruct.domain.S3Service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.FileCopyUtils;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import software.amazon.awssdk.core.ResponseInputStream;
@@ -23,23 +24,25 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 @SpringBootTest(
         classes = LocalStackS3Config.class
 )
+@ActiveProfiles("integration")
 @Testcontainers
 public class S3ServiceTests {
     @Autowired
     private S3Client s3TestClient;
+
+    @Autowired
+    private AwsProperties awsProperties;
+
     private S3Service s3Service;
-    private static final String BUCKET_NAME = "test-bucket";
     private static final String TEST_IMAGE_NAME = "test-image.jpeg";
     private static final String TEST_IMAGE_PATH = "test-image.jpeg";
     private static final String EXPECTED_URL_PATTERN = "https://test-bucket\\.s3\\.ap-northeast-2\\.amazonaws\\.com/[a-f0-9\\-]+_test-image\\.jpeg";
 
     @BeforeEach
     void setUp() {
-        s3Service = new S3Service(s3TestClient);
-        // ReflectionTestUtils를 사용해 bucketName 강제 주입
-        ReflectionTestUtils.setField(s3Service, "bucketName", BUCKET_NAME);
-        // 버킷을 미리 생성해 둡니다.
-        s3TestClient.createBucket(CreateBucketRequest.builder().bucket(BUCKET_NAME).build());
+        s3Service = new S3Service(s3TestClient, awsProperties);
+        // 버킷을 미리 생성
+        s3TestClient.createBucket(CreateBucketRequest.builder().bucket(awsProperties.bucket()).build());
     }
 
     @Test
@@ -65,7 +68,7 @@ public class S3ServiceTests {
 
         // S3에 업로드한 파일이 실제로 있는지 확인
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                .bucket(BUCKET_NAME)
+                .bucket(awsProperties.bucket())
                 .key(key)
                 .build();
 
