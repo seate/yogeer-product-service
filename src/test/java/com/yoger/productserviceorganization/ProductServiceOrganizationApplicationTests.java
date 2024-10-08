@@ -2,9 +2,9 @@ package com.yoger.productserviceorganization;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.yoger.productserviceorganization.proruct.config.AwsProperties;
-import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
-import com.yoger.productserviceorganization.proruct.dto.response.DemoProductResponseDTO;
+import com.yoger.productserviceorganization.product.config.AwsProperties;
+import com.yoger.productserviceorganization.product.domain.model.ProductState;
+import com.yoger.productserviceorganization.product.dto.response.DemoProductResponseDTO;
 import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

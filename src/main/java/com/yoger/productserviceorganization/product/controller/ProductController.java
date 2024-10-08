@@ -1,9 +1,9 @@
-package com.yoger.productserviceorganization.proruct.controller;
+package com.yoger.productserviceorganization.product.controller;
 
-import com.yoger.productserviceorganization.proruct.domain.ProductService;
-import com.yoger.productserviceorganization.proruct.dto.request.DemoProductRequestDTO;
-import com.yoger.productserviceorganization.proruct.dto.response.DemoProductResponseDTO;
-import com.yoger.productserviceorganization.proruct.dto.response.SellableProductResponseDTO;
+import com.yoger.productserviceorganization.product.domain.ProductService;
+import com.yoger.productserviceorganization.product.dto.request.DemoProductRequestDTO;
+import com.yoger.productserviceorganization.product.dto.response.DemoProductResponseDTO;
+import com.yoger.productserviceorganization.product.dto.response.SellableProductResponseDTO;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

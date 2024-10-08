@@ -1,4 +1,4 @@
-package com.yoger.productserviceorganization.proruct.config;
+package com.yoger.productserviceorganization.product.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

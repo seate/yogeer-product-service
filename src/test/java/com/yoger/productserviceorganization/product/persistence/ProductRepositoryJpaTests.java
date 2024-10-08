@@ -2,11 +2,9 @@ package com.yoger.productserviceorganization.product.persistence;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.yoger.productserviceorganization.proruct.config.DataConfig;
-import com.yoger.productserviceorganization.proruct.domain.model.PriceByQuantity;
-import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
-import com.yoger.productserviceorganization.proruct.persistence.ProductEntity;
-import com.yoger.productserviceorganization.proruct.persistence.ProductRepository;
+import com.yoger.productserviceorganization.product.config.DataConfig;
+import com.yoger.productserviceorganization.product.domain.model.PriceByQuantity;
+import com.yoger.productserviceorganization.product.domain.model.ProductState;
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.stream.Collectors;

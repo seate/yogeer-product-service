@@ -1,8 +1,8 @@
-package com.yoger.productserviceorganization.proruct.mapper;
+package com.yoger.productserviceorganization.product.mapper;
 
-import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
-import com.yoger.productserviceorganization.proruct.dto.request.DemoProductRequestDTO;
-import com.yoger.productserviceorganization.proruct.persistence.ProductEntity;
+import com.yoger.productserviceorganization.product.domain.model.ProductState;
+import com.yoger.productserviceorganization.product.dto.request.DemoProductRequestDTO;
+import com.yoger.productserviceorganization.product.persistence.ProductEntity;
 
 public class ProductMapper {
     public static ProductEntity toPersistenceFrom(DemoProductRequestDTO productRequestDTO, String imageUrl) {

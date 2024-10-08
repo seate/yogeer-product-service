@@ -1,6 +1,6 @@
-package com.yoger.productserviceorganization.proruct.persistence;
+package com.yoger.productserviceorganization.product.persistence;
 
-import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
+import com.yoger.productserviceorganization.product.domain.model.ProductState;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

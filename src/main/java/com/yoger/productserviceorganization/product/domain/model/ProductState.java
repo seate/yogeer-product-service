@@ -1,4 +1,4 @@
-package com.yoger.productserviceorganization.proruct.domain.model;
+package com.yoger.productserviceorganization.product.domain.model;
 
 public enum ProductState {
     DEMO,

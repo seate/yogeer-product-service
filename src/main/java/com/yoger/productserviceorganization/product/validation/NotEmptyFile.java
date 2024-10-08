@@ -1,4 +1,4 @@
-package com.yoger.productserviceorganization.proruct.validation;
+package com.yoger.productserviceorganization.product.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

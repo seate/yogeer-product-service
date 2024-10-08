@@ -1,7 +1,7 @@
-package com.yoger.productserviceorganization.proruct.dto.request;
+package com.yoger.productserviceorganization.product.dto.request;
 
-import com.yoger.productserviceorganization.proruct.validation.NotEmptyFile;
-import com.yoger.productserviceorganization.proruct.validation.ValidImage;
+import com.yoger.productserviceorganization.product.validation.NotEmptyFile;
+import com.yoger.productserviceorganization.product.validation.ValidImage;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

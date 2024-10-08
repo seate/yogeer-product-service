@@ -2,9 +2,8 @@ package com.yoger.productserviceorganization.product.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.yoger.productserviceorganization.proruct.domain.model.PriceByQuantity;
-import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
-import com.yoger.productserviceorganization.proruct.persistence.ProductEntity;
+import com.yoger.productserviceorganization.product.domain.model.PriceByQuantity;
+import com.yoger.productserviceorganization.product.domain.model.ProductState;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

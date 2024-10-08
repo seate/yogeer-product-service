@@ -1,4 +1,4 @@
-package com.yoger.productserviceorganization.proruct.controller;
+package com.yoger.productserviceorganization.product.controller;
 
 import java.util.HashMap;
 import java.util.Map;

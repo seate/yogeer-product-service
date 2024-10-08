@@ -1,7 +1,7 @@
-package com.yoger.productserviceorganization.proruct.persistence;
+package com.yoger.productserviceorganization.product.persistence;
 
-import com.yoger.productserviceorganization.proruct.domain.model.PriceByQuantity;
-import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
+import com.yoger.productserviceorganization.product.domain.model.PriceByQuantity;
+import com.yoger.productserviceorganization.product.domain.model.ProductState;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;

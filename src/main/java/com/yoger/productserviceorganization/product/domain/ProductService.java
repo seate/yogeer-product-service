@@ -1,12 +1,12 @@
-package com.yoger.productserviceorganization.proruct.domain;
+package com.yoger.productserviceorganization.product.domain;
 
-import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
-import com.yoger.productserviceorganization.proruct.dto.request.DemoProductRequestDTO;
-import com.yoger.productserviceorganization.proruct.dto.response.DemoProductResponseDTO;
-import com.yoger.productserviceorganization.proruct.dto.response.SellableProductResponseDTO;
-import com.yoger.productserviceorganization.proruct.mapper.ProductMapper;
-import com.yoger.productserviceorganization.proruct.persistence.ProductEntity;
-import com.yoger.productserviceorganization.proruct.persistence.ProductRepository;
+import com.yoger.productserviceorganization.product.domain.model.ProductState;
+import com.yoger.productserviceorganization.product.dto.request.DemoProductRequestDTO;
+import com.yoger.productserviceorganization.product.dto.response.DemoProductResponseDTO;
+import com.yoger.productserviceorganization.product.dto.response.SellableProductResponseDTO;
+import com.yoger.productserviceorganization.product.mapper.ProductMapper;
+import com.yoger.productserviceorganization.product.persistence.ProductEntity;
+import com.yoger.productserviceorganization.product.persistence.ProductRepository;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

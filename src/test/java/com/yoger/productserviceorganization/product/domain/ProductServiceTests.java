@@ -3,12 +3,11 @@ package com.yoger.productserviceorganization.product.domain;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 
-import com.yoger.productserviceorganization.proruct.domain.ProductService;
-import com.yoger.productserviceorganization.proruct.domain.model.PriceByQuantity;
-import com.yoger.productserviceorganization.proruct.domain.model.ProductState;
-import com.yoger.productserviceorganization.proruct.dto.response.SellableProductResponseDTO;
-import com.yoger.productserviceorganization.proruct.persistence.ProductEntity;
-import com.yoger.productserviceorganization.proruct.persistence.ProductRepository;
+import com.yoger.productserviceorganization.product.domain.model.PriceByQuantity;
+import com.yoger.productserviceorganization.product.domain.model.ProductState;
+import com.yoger.productserviceorganization.product.dto.response.SellableProductResponseDTO;
+import com.yoger.productserviceorganization.product.persistence.ProductEntity;
+import com.yoger.productserviceorganization.product.persistence.ProductRepository;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

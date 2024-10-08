@@ -1,6 +1,6 @@
-package com.yoger.productserviceorganization.proruct.domain;
+package com.yoger.productserviceorganization.product.domain;
 
-import com.yoger.productserviceorganization.proruct.config.AwsProperties;
+import com.yoger.productserviceorganization.product.config.AwsProperties;
 import java.io.IOException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
