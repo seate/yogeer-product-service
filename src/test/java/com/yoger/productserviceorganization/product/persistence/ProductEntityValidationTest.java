@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 
 public class ProductEntityValidationTest {
     private Validator validator;
-
     private List<PriceByQuantity> priceByQuantities;
 
     @BeforeEach
@@ -24,9 +23,9 @@ public class ProductEntityValidationTest {
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
         priceByQuantities = List.of(
-                new PriceByQuantity(100, 10000)
-                , new PriceByQuantity(1000, 8500)
-                , new PriceByQuantity(10000, 7500)
+                new PriceByQuantity(100, 10000),
+                new PriceByQuantity(1000, 8500),
+                new PriceByQuantity(10000, 7500)
         );
     }
 
@@ -38,7 +37,13 @@ public class ProductEntityValidationTest {
                 priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.SELLABLE
+                ProductState.SELLABLE,
+                "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg",
+                1L,
+                "제작자 이름",
+                null, // dueDate
+                100, // initialStockQuantity
+                100 // stockQuantity
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -53,11 +58,17 @@ public class ProductEntityValidationTest {
                 priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.SELLABLE
+                ProductState.SELLABLE,
+                "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg",
+                1L,
+                "제작자 이름",
+                null,
+                100,
+                100
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
-        assertThat(violations).hasSize(1); // 제약 위반이 1개여야 함
+        assertThat(violations).hasSize(1);
         assertThat(violations.iterator().next().getMessage()).isEqualTo("상품 이름은 2글자 이상 50글자 이하만 가능합니다.");
     }
 
@@ -69,7 +80,13 @@ public class ProductEntityValidationTest {
                 priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.SELLABLE
+                ProductState.SELLABLE,
+                "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg",
+                1L,
+                "제작자 이름",
+                null,
+                100,
+                100
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -85,7 +102,13 @@ public class ProductEntityValidationTest {
                 priceByQuantities,
                 "짧음",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.SELLABLE
+                ProductState.SELLABLE,
+                "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg",
+                1L,
+                "제작자 이름",
+                null,
+                100,
+                100
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -101,7 +124,13 @@ public class ProductEntityValidationTest {
                 priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://invalid-url.com/image.jpg",
-                ProductState.SELLABLE
+                ProductState.SELLABLE,
+                "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg",
+                1L,
+                "제작자 이름",
+                null,
+                100,
+                100
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);
@@ -117,7 +146,13 @@ public class ProductEntityValidationTest {
                 priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                null
+                null,
+                "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg",
+                1L,
+                "제작자 이름",
+                null,
+                100,
+                100
         );
 
         Set<ConstraintViolation<ProductEntity>> violations = validator.validate(productEntity);

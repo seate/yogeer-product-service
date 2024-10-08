@@ -1,6 +1,7 @@
 package com.yoger.productserviceorganization;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 import com.yoger.productserviceorganization.product.config.AwsProperties;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;
@@ -51,6 +52,11 @@ class ProductServiceOrganizationApplicationTests {
         builder.part("image", new ClassPathResource("test-image.jpeg"))
                 .filename("test-image.jpeg")
                 .contentType(MediaType.IMAGE_JPEG);
+        builder.part("thumbnailImage", new ClassPathResource("test-thumbnail.jpeg"))
+                .filename("test-thumbnail.jpeg")
+                .contentType(MediaType.IMAGE_JPEG);
+        builder.part("creatorId", "1");  // Long 값으로 전송
+        builder.part("creatorName", "Test Creator");  // 제작자 이름 추가
         return builder;
     }
 
@@ -68,28 +74,43 @@ class ProductServiceOrganizationApplicationTests {
 
     @Test
     void whenPostRequestThenProductCreated() throws IOException {
+        // Given
         MultipartBodyBuilder builder = getTestBodyBuilder();
 
+        // When
         DemoProductResponseDTO demoProductResponseDTO = makeDemoTestProduct(builder);
 
+        // Then
         String expectedImageUrlPattern = String.format(
                 "https://%s\\.s3\\.%s\\.amazonaws\\.com/[a-f0-9\\-]+_test-image\\.jpeg",
                 awsProperties.bucket(),
                 awsProperties.region()
         );
 
-        assertThat(demoProductResponseDTO.name()).isEqualTo("Test Product");
-        assertThat(demoProductResponseDTO.description()).isEqualTo("This is a test product description");
+        // 이미지 URL에 대한 별도 검증
         assertThat(demoProductResponseDTO.imageUrl()).matches(expectedImageUrlPattern);
-        assertThat(demoProductResponseDTO.state()).isEqualTo(ProductState.DEMO);
-    }
 
+        // 나머지 필드 검증
+        assertThat(demoProductResponseDTO)
+                .extracting(DemoProductResponseDTO::name, DemoProductResponseDTO::description,
+                        DemoProductResponseDTO::creatorId, DemoProductResponseDTO::creatorName, DemoProductResponseDTO::state)
+                .containsExactly(
+                        "Test Product",
+                        "This is a test product description",
+                        1L,
+                        "Test Creator",
+                        ProductState.DEMO
+                );
+    }
     @Test
     void whenDemoGetRequestThenDemoListReturned() {
+        // Given
         MultipartBodyBuilder builder = getTestBodyBuilder();
 
+        // First, create a demo product
         DemoProductResponseDTO demoProductResponseDTO = makeDemoTestProduct(builder);
 
+        // When
         List<DemoProductResponseDTO> demoProductResponseDTOs = webTestClient.get()
                 .uri("/api/products/demo")
                 .exchange()
@@ -98,7 +119,20 @@ class ProductServiceOrganizationApplicationTests {
                 .returnResult()
                 .getResponseBody();
 
-        assertThat(demoProductResponseDTOs.size()).isEqualTo(1);
-        assertThat(demoProductResponseDTOs.get(0)).isEqualTo(demoProductResponseDTO);
+        // Then
+        assertThat(demoProductResponseDTOs)
+                .hasSize(1)
+                .extracting(DemoProductResponseDTO::id, DemoProductResponseDTO::name, DemoProductResponseDTO::description,
+                        DemoProductResponseDTO::imageUrl, DemoProductResponseDTO::creatorId, DemoProductResponseDTO::creatorName, DemoProductResponseDTO::state)
+                .containsExactly(
+                        tuple(demoProductResponseDTO.id(),
+                                demoProductResponseDTO.name(),
+                                demoProductResponseDTO.description(),
+                                demoProductResponseDTO.imageUrl(),
+                                demoProductResponseDTO.creatorId(),
+                                demoProductResponseDTO.creatorName(),
+                                demoProductResponseDTO.state())
+                );
     }
 }
+
