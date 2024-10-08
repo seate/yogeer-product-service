@@ -3,7 +3,8 @@ package com.yoger.productserviceorganization.product.domain;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;
 import com.yoger.productserviceorganization.product.dto.request.DemoProductRequestDTO;
 import com.yoger.productserviceorganization.product.dto.response.DemoProductResponseDTO;
-import com.yoger.productserviceorganization.product.dto.response.SellableProductResponseDTO;
+import com.yoger.productserviceorganization.product.dto.response.SimpleDemoProductResponseDTO;
+import com.yoger.productserviceorganization.product.dto.response.SimpleSellableProductResponseDTO;
 import com.yoger.productserviceorganization.product.mapper.ProductMapper;
 import com.yoger.productserviceorganization.product.persistence.ProductEntity;
 import com.yoger.productserviceorganization.product.persistence.ProductRepository;
@@ -18,14 +19,14 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final S3Service s3Service;
 
-    public List<SellableProductResponseDTO> viewSellableProducts() {
+    public List<SimpleSellableProductResponseDTO> viewSellableProducts() {
         return productRepository.findByState(ProductState.SELLABLE).stream()
                 .map(this::mapToSellableDTO)
                 .toList();
     }
 
-    private SellableProductResponseDTO mapToSellableDTO(ProductEntity productEntity) {
-        return SellableProductResponseDTO.from(productEntity);
+    private SimpleSellableProductResponseDTO mapToSellableDTO(ProductEntity productEntity) {
+        return SimpleSellableProductResponseDTO.from(productEntity);
     }
 
     public DemoProductResponseDTO saveDemoProduct(@Valid DemoProductRequestDTO demoProductRequestDTO) {
@@ -36,13 +37,13 @@ public class ProductService {
         return DemoProductResponseDTO.from(productEntity);
     }
 
-    public List<DemoProductResponseDTO> viewDemoProducts() {
+    public List<SimpleDemoProductResponseDTO> viewDemoProducts() {
         return productRepository.findByState(ProductState.DEMO).stream()
                 .map(this::mapToDemoDTO)
                 .toList();
     }
 
-    private DemoProductResponseDTO mapToDemoDTO(ProductEntity productEntity) {
-        return DemoProductResponseDTO.from(productEntity);
+    private SimpleDemoProductResponseDTO mapToDemoDTO(ProductEntity productEntity) {
+        return SimpleDemoProductResponseDTO.from(productEntity);
     }
 }

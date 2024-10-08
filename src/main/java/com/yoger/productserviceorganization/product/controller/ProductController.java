@@ -3,7 +3,8 @@ package com.yoger.productserviceorganization.product.controller;
 import com.yoger.productserviceorganization.product.domain.ProductService;
 import com.yoger.productserviceorganization.product.dto.request.DemoProductRequestDTO;
 import com.yoger.productserviceorganization.product.dto.response.DemoProductResponseDTO;
-import com.yoger.productserviceorganization.product.dto.response.SellableProductResponseDTO;
+import com.yoger.productserviceorganization.product.dto.response.SimpleDemoProductResponseDTO;
+import com.yoger.productserviceorganization.product.dto.response.SimpleSellableProductResponseDTO;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public List<SellableProductResponseDTO> getSellableProducts() {
+    public List<SimpleSellableProductResponseDTO> getSellableProducts() {
         return productService.viewSellableProducts();
     }
 
@@ -33,7 +34,7 @@ public class ProductController {
     }
 
     @GetMapping("/demo")
-    public List<DemoProductResponseDTO> getDemoProducts() {
+    public List<SimpleDemoProductResponseDTO> getDemoProducts() {
         return productService.viewDemoProducts();
     }
 }
