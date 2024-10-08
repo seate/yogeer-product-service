@@ -30,7 +30,8 @@ public class ProductService {
 
     public DemoProductResponseDTO saveDemoProduct(@Valid DemoProductRequestDTO demoProductRequestDTO) {
         String imageUrl = s3Service.uploadImage(demoProductRequestDTO.image());
-        ProductEntity productEntity = ProductMapper.toPersistenceFrom(demoProductRequestDTO, imageUrl);
+        String thumbnailImageUrl = s3Service.uploadImage(demoProductRequestDTO.thumbnailImage());
+        ProductEntity productEntity = ProductMapper.toPersistenceFrom(demoProductRequestDTO, imageUrl, thumbnailImageUrl);
         productRepository.save(productEntity);
         return DemoProductResponseDTO.from(productEntity);
     }
