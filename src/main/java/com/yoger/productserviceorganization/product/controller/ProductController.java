@@ -24,7 +24,7 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity<List<SimpleSellableProductResponseDTO>> getSellableProducts() {
-        List<SimpleSellableProductResponseDTO> products = productService.viewSellableProducts();
+        List<SimpleSellableProductResponseDTO> products = productService.findSimpleSellableProducts();
         return ResponseEntity.ok(products);
     }
 
@@ -36,7 +36,7 @@ public class ProductController {
 
     @GetMapping("/demo")
     public ResponseEntity<List<SimpleDemoProductResponseDTO>> getDemoProducts() {
-        List<SimpleDemoProductResponseDTO> demoProducts = productService.viewDemoProducts();
+        List<SimpleDemoProductResponseDTO> demoProducts = productService.findSimpleDemoProducts();
         return ResponseEntity.ok(demoProducts);
     }
 }

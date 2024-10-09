@@ -5,7 +5,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.yoger.productserviceorganization.product.domain.model.PriceByQuantity;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;
-import com.yoger.productserviceorganization.product.dto.response.SellableProductResponseDTO;
+import com.yoger.productserviceorganization.product.dto.response.SimpleSellableProductResponseDTO;
 import com.yoger.productserviceorganization.product.persistence.ProductEntity;
 import com.yoger.productserviceorganization.product.persistence.ProductRepository;
 import java.time.LocalDateTime;
@@ -37,7 +37,7 @@ public class ProductServiceTests {
     }
 
     @Test
-    void viewSellableProducts_ReturnsSellableProducts() {
+    void findSellableProducts_ReturnsSellableProducts() {
         // Given
         ProductEntity sellableProduct = ProductEntity.of(
                 "유효한 상품",
@@ -55,19 +55,16 @@ public class ProductServiceTests {
         given(productRepository.findByState(ProductState.SELLABLE)).willReturn(List.of(sellableProduct));
 
         // When
-        List<SellableProductResponseDTO> result = productService.viewSellableProducts();
+        List<SimpleSellableProductResponseDTO> result = productService.findSimpleSellableProducts();
 
         // Then
         assertThat(result).hasSize(1);
         assertThat(result.get(0).id()).isEqualTo(sellableProduct.getId());
         assertThat(result.get(0).name()).isEqualTo("유효한 상품");
         assertThat(result.get(0).priceByQuantities()).isEqualTo(priceByQuantities);
-        assertThat(result.get(0).description()).isEqualTo("상품에 대한 설명입니다.");
-        assertThat(result.get(0).imageUrl()).isEqualTo("https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg");
         assertThat(result.get(0).state()).isEqualTo(ProductState.SELLABLE);
         assertThat(result.get(0).creatorName()).isEqualTo("제작자 이름");
         assertThat(result.get(0).dueDate()).isEqualTo(sellableProduct.getDueDate());
-        assertThat(result.get(0).soldAmount()).isEqualTo(80); // 100 - 20 = 80
     }
 }
 

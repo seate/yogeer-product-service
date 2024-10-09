@@ -6,6 +6,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import com.yoger.productserviceorganization.product.config.AwsProperties;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;
 import com.yoger.productserviceorganization.product.dto.response.DemoProductResponseDTO;
+import com.yoger.productserviceorganization.product.dto.response.SimpleDemoProductResponseDTO;
 import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,6 +61,16 @@ class ProductServiceOrganizationApplicationTests {
         return builder;
     }
 
+    private List<SimpleDemoProductResponseDTO> getSimpleDemoTestProducts() {
+        return webTestClient.get()
+                .uri("/api/products/demo")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(SimpleDemoProductResponseDTO.class)  // body를 List로 매핑
+                .returnResult()
+                .getResponseBody();
+    }
+
     private DemoProductResponseDTO makeDemoTestProduct(MultipartBodyBuilder builder) {
         return webTestClient.post()
                 .uri("/api/products")
@@ -92,8 +103,13 @@ class ProductServiceOrganizationApplicationTests {
 
         // 나머지 필드 검증
         assertThat(demoProductResponseDTO)
-                .extracting(DemoProductResponseDTO::name, DemoProductResponseDTO::description,
-                        DemoProductResponseDTO::creatorId, DemoProductResponseDTO::creatorName, DemoProductResponseDTO::state)
+                .extracting(
+                        DemoProductResponseDTO::name,
+                        DemoProductResponseDTO::description,
+                        DemoProductResponseDTO::creatorId,
+                        DemoProductResponseDTO::creatorName,
+                        DemoProductResponseDTO::state
+                )
                 .containsExactly(
                         "Test Product",
                         "This is a test product description",
@@ -102,6 +118,7 @@ class ProductServiceOrganizationApplicationTests {
                         ProductState.DEMO
                 );
     }
+
     @Test
     void whenDemoGetRequestThenDemoListReturned() {
         // Given
@@ -111,27 +128,24 @@ class ProductServiceOrganizationApplicationTests {
         DemoProductResponseDTO demoProductResponseDTO = makeDemoTestProduct(builder);
 
         // When
-        List<DemoProductResponseDTO> demoProductResponseDTOs = webTestClient.get()
-                .uri("/api/products/demo")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBodyList(DemoProductResponseDTO.class)  // body를 List로 매핑
-                .returnResult()
-                .getResponseBody();
+        List<SimpleDemoProductResponseDTO> demoProductResponseDTOs = getSimpleDemoTestProducts();
 
         // Then
         assertThat(demoProductResponseDTOs)
                 .hasSize(1)
-                .extracting(DemoProductResponseDTO::id, DemoProductResponseDTO::name, DemoProductResponseDTO::description,
-                        DemoProductResponseDTO::imageUrl, DemoProductResponseDTO::creatorId, DemoProductResponseDTO::creatorName, DemoProductResponseDTO::state)
+                .extracting(
+                        SimpleDemoProductResponseDTO::id,
+                        SimpleDemoProductResponseDTO::name,
+                        SimpleDemoProductResponseDTO::creatorName,
+                        SimpleDemoProductResponseDTO::state
+                )
                 .containsExactly(
-                        tuple(demoProductResponseDTO.id(),
+                        tuple(
+                                demoProductResponseDTO.id(),
                                 demoProductResponseDTO.name(),
-                                demoProductResponseDTO.description(),
-                                demoProductResponseDTO.imageUrl(),
-                                demoProductResponseDTO.creatorId(),
                                 demoProductResponseDTO.creatorName(),
-                                demoProductResponseDTO.state())
+                                demoProductResponseDTO.state()
+                        )
                 );
     }
 }
