@@ -2,6 +2,7 @@ package com.yoger.productserviceorganization.product.controller;
 
 import com.yoger.productserviceorganization.product.domain.exception.InsufficientStockException;
 import com.yoger.productserviceorganization.product.domain.exception.InvalidStockException;
+import com.yoger.productserviceorganization.product.domain.exception.ProductNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -34,6 +35,12 @@ public class ProductControllerAdvice {
     @ExceptionHandler(InsufficientStockException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public String handleInsufficientStockException(InsufficientStockException ex) {
+        return ex.getMessage();
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    String bookNotFoundHandler(ProductNotFoundException ex) {
         return ex.getMessage();
     }
 }
