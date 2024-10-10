@@ -4,8 +4,10 @@ import static org.assertj.core.api.Assertions.*;
 
 import com.yoger.productserviceorganization.product.config.DataConfig;
 import com.yoger.productserviceorganization.product.domain.model.PriceByQuantity;
+import com.yoger.productserviceorganization.product.domain.model.Product;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;
 import jakarta.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,7 +24,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 @DataJpaTest
-@Import(DataConfig.class)
+@Import({
+        DataConfig.class,
+        ProductRepositoryImpl.class
+})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("integration")
 public class ProductRepositoryJpaTests {
@@ -44,7 +49,8 @@ public class ProductRepositoryJpaTests {
     @Test
     @DisplayName("상품들이 정상적으로 저장되었는 지 테스트")
     void findAllProducts() {
-        ProductEntity productEntity1 = ProductEntity.of(
+        Product product1 = Product.of(
+                null,
                 "유효한상품이름1",
                 priceByQuantities,
                 "상품에 대한 설명입니다.",
@@ -53,11 +59,12 @@ public class ProductRepositoryJpaTests {
                 "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg",
                 1L, // creatorId
                 "제작자 이름1", // creatorName
-                null, // dueDate
+                LocalDateTime.now().plusDays(30), // dueDate
                 100, // initialStockQuantity
                 100 // stockQuantity
         );
-        ProductEntity productEntity2 = ProductEntity.of(
+        Product product2 = Product.of(
+                null,
                 "유효한상품이름2",
                 priceByQuantities,
                 "상품에 대한 설명입니다.",
@@ -66,18 +73,18 @@ public class ProductRepositoryJpaTests {
                 "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg",
                 2L, // creatorId
                 "제작자 이름2", // creatorName
-                null, // dueDate
+                LocalDateTime.now().plusDays(30), // dueDate
                 200, // initialStockQuantity
                 200 // stockQuantity
         );
-        productRepository.save(productEntity1);
-        productRepository.save(productEntity2);
+        productRepository.save(product1);
+        productRepository.save(product2);
 
-        List<ProductEntity> actualProducts = productRepository.findAll();
+        List<Product> actualProducts = productRepository.findAll();
 
         assertThat(actualProducts.parallelStream()
-                .filter(productEntity -> productEntity.getName().equals(productEntity1.getName()) || productEntity.getName()
-                        .equals(productEntity2.getName()))
+                .filter(productEntity -> productEntity.getName().equals(product1.getName()) || productEntity.getName()
+                        .equals(product2.getName()))
                 .collect(Collectors.toList())).hasSize(2);
     }
 
@@ -85,7 +92,8 @@ public class ProductRepositoryJpaTests {
     @MethodSource("invalidProductParameters")
     @DisplayName("유효성 검증 실패 테스트 - 다양한 경우")
     void productValidationFailTest(String name, String description, String imageUrl, ProductState state, String thumbnailImageUrl, Long creatorId, String creatorName, String expectedMessage) {
-        ProductEntity productEntity = ProductEntity.of(
+        Product product = Product.of(
+                null,
                 name,
                 priceByQuantities,
                 description,
@@ -94,12 +102,12 @@ public class ProductRepositoryJpaTests {
                 thumbnailImageUrl,
                 creatorId,
                 creatorName,
-                null, // dueDate
+                LocalDateTime.now().plusDays(30), // dueDate
                 100, // initialStockQuantity
                 100 // stockQuantity
         );
 
-        assertThatThrownBy(() -> productRepository.save(productEntity))
+        assertThatThrownBy(() -> productRepository.save(product))
                 .isInstanceOf(ConstraintViolationException.class)
                 .hasMessageContaining(expectedMessage);
     }
