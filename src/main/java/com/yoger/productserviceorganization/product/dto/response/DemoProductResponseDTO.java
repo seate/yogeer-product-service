@@ -1,7 +1,7 @@
 package com.yoger.productserviceorganization.product.dto.response;
 
+import com.yoger.productserviceorganization.product.domain.model.Product;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;
-import com.yoger.productserviceorganization.product.persistence.ProductEntity;
 
 public record DemoProductResponseDTO(
         Long id,
@@ -12,15 +12,15 @@ public record DemoProductResponseDTO(
         String creatorName,
         ProductState state
         ) {
-    public static DemoProductResponseDTO from(ProductEntity productEntity) {
+    public static DemoProductResponseDTO from(Product product) {
         return new DemoProductResponseDTO(
-                productEntity.getId(),
-                productEntity.getName(),
-                productEntity.getDescription(),
-                productEntity.getImageUrl(),
-                productEntity.getCreatorId(),
-                productEntity.getCreatorName(),
-                productEntity.getState()
+                product.getId(),
+                product.getName(),
+                product.getDescription(),
+                product.getImageUrl(),
+                product.getCreatorId(),
+                product.getCreatorName(),
+                product.getState()
         );
     }
 }
