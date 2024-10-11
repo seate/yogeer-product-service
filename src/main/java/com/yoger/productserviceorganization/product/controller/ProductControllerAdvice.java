@@ -2,6 +2,7 @@ package com.yoger.productserviceorganization.product.controller;
 
 import com.yoger.productserviceorganization.product.domain.exception.InsufficientStockException;
 import com.yoger.productserviceorganization.product.domain.exception.InvalidStockException;
+import com.yoger.productserviceorganization.product.domain.exception.InvalidTimeSetException;
 import com.yoger.productserviceorganization.product.domain.exception.ProductNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +42,12 @@ public class ProductControllerAdvice {
     @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     String bookNotFoundHandler(ProductNotFoundException ex) {
+        return ex.getMessage();
+    }
+
+    @ExceptionHandler(InvalidTimeSetException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    String HandleInvalidTimeSetException(InvalidTimeSetException ex) {
         return ex.getMessage();
     }
 }
