@@ -71,7 +71,7 @@ public class ProductEntity {
     )
     private String thumbnailImageUrl;
 
-    @NotNull
+    @NotNull(message = "제작자의 ID를 추가해주세요.")
     private Long creatorId;
 
     @NotBlank(message = "제작자의 이름을 입력해주세요.")
