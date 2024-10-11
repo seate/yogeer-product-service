@@ -38,4 +38,26 @@ public class StockDomain {
     int getInitialStockQuantity() {
         return this.initialStockQuantity;
     }
+
+    public void validateByState(ProductState state) {
+        switch (state) {
+            case SELLABLE -> validateSellableState();
+            case DEMO -> validateDemoState();
+            case SALE_ENDED -> {
+                // 검증이 필요 없는 상태는 처리하지 않음
+            }
+        }
+    }
+
+    private void validateSellableState() {
+        if (initialStockQuantity == 0) {
+            throw new InvalidStockException("판매 가능 상품의 초기 재고 수량은 0보다 커야 합니다.");
+        }
+    }
+
+    private void validateDemoState() {
+        if (initialStockQuantity != 0 || stockQuantity != 0) {
+            throw new InvalidStockException("데모 상품은 초기 재고 수량 및 현재 재고 수량을 가질 수 없습니다.");
+        }
+    }
 }
