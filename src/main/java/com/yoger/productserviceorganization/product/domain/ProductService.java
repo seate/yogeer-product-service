@@ -4,6 +4,7 @@ import com.yoger.productserviceorganization.product.domain.model.Product;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;
 import com.yoger.productserviceorganization.product.dto.request.DemoProductRequestDTO;
 import com.yoger.productserviceorganization.product.dto.response.DemoProductResponseDTO;
+import com.yoger.productserviceorganization.product.dto.response.SellableProductResponseDTO;
 import com.yoger.productserviceorganization.product.dto.response.SimpleDemoProductResponseDTO;
 import com.yoger.productserviceorganization.product.dto.response.SimpleSellableProductResponseDTO;
 import com.yoger.productserviceorganization.product.mapper.ProductMapper;
@@ -47,5 +48,17 @@ public class ProductService {
 
     private SimpleDemoProductResponseDTO mapToDemoDTO(Product product) {
         return SimpleDemoProductResponseDTO.from(product);
+    }
+
+    public SellableProductResponseDTO findSellableProduct(Long productId) {
+        Product product = productRepository.findById(productId);
+        product.validateUnexpectedState(ProductState.SELLABLE);
+        return SellableProductResponseDTO.from(product);
+    }
+
+    public DemoProductResponseDTO findDemoProduct(Long productId) {
+        Product product = productRepository.findById(productId);
+        product.validateUnexpectedState(ProductState.DEMO);
+        return DemoProductResponseDTO.from(product);
     }
 }
