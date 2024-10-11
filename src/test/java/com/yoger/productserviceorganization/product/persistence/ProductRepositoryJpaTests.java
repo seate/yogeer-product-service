@@ -115,7 +115,10 @@ public class ProductRepositoryJpaTests {
     // 유효성 실패 케이스들을 제공하는 메서드
     private static Stream<Arguments> invalidProductParameters() {
         return Stream.of(
-                // name 유효성 검증 실패 케이스
+                // name 유효성 검증 실패 케이스들
+                Arguments.of(null, "상품에 대한 설명입니다.", "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg", ProductState.SELLABLE,
+                        "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg", 1L, "제작자 이름",
+                        "상품 이름을 작성해주세요."),
                 Arguments.of("짧", "상품에 대한 설명입니다.", "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg", ProductState.SELLABLE,
                         "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg", 1L, "제작자 이름",
                         "상품 이름은 2글자 이상 50글자 이하만 가능합니다."),
@@ -128,7 +131,10 @@ public class ProductRepositoryJpaTests {
                         "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg", 1L, "제작자 이름",
                         "상품 이름은 한글, 영어, 숫자, '-', '_' 만 사용할 수 있습니다."),
 
-                // description 유효성 검증 실패 케이스
+                // description 유효성 검증 실패 케이스들
+                Arguments.of("정상 이름", null, "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
+                        ProductState.SELLABLE, "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg", 1L, "제작자 이름",
+                        "상품에 대한 설명을 적어주세요."),
                 Arguments.of("정상 이름", "짧", "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
                         ProductState.SELLABLE, "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg", 1L, "제작자 이름",
                         "상품 상세 설명은 10글자 이상 500글자 이하만 가능합니다."),
@@ -137,16 +143,29 @@ public class ProductRepositoryJpaTests {
                         "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg", 1L, "제작자 이름",
                         "상품 상세 설명은 10글자 이상 500글자 이하만 가능합니다."),
 
-                // imageUrl 유효성 검증 실패 케이스
+                // imageUrl 유효성 검증 실패 케이스들
+                Arguments.of("정상 이름", "상품에 대한 설명입니다.", null, ProductState.SELLABLE,
+                        "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg", 1L, "제작자 이름",
+                        "상품에 대한 사진을 추가해주세요."),
                 Arguments.of("정상 이름", "상품에 대한 설명입니다.", "https://wrong-url.com/myimage.jpg", ProductState.SELLABLE,
                         "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg", 1L, "제작자 이름",
                         "유효한 S3 URL 형식이어야 합니다."),
 
-                // state 유효성 검증 실패 케이스
-                Arguments.of("정상 이름", "상품에 대한 설명입니다.", "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg", null,
-                        "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg", 1L, "제작자 이름",
-                        "상품의 상태를 정해주세요.")
+                // thumbnailImageUrl 유효성 검증 실패 케이스들
+                Arguments.of("정상 이름", "상품에 대한 설명입니다.", "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg", ProductState.SELLABLE,
+                        null, 1L, "제작자 이름", "상품에 대한 대표 사진을 추가해주세요."),
+                Arguments.of("정상 이름", "상품에 대한 설명입니다.", "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg", ProductState.SELLABLE,
+                        "https://wrong-url.com/my-thumbnail.jpg", 1L, "제작자 이름", "유효한 S3 URL 형식이어야 합니다."),
+
+                // creatorId 유효성 검증 실패 케이스들
+                Arguments.of("정상 이름", "상품에 대한 설명입니다.", "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg", ProductState.SELLABLE,
+                        "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg", null, "제작자 이름",
+                        "제작자의 ID를 추가해주세요."),
+
+                // creatorName 유효성 검증 실패 케이스들
+                Arguments.of("정상 이름", "상품에 대한 설명입니다.", "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg", ProductState.SELLABLE,
+                        "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg", 1L, null,
+                        "제작자의 이름을 입력해주세요.")
         );
     }
-
 }
