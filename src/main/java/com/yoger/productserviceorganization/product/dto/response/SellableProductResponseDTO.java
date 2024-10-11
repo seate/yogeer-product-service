@@ -16,9 +16,10 @@ public record SellableProductResponseDTO(
         Long creatorId,
         String creatorName,
         LocalDateTime dueDate,
-        int soldAmount
+        int soldQuantity
 ) {
     public static SellableProductResponseDTO from(Product product) {
+        int soldQuantity = product.getInitialStockQuantity() - product.getStockQuantity(); // 판매된 수량 계산
         return new SellableProductResponseDTO(
                 product.getId(),
                 product.getName(),
@@ -29,7 +30,7 @@ public record SellableProductResponseDTO(
                 product.getCreatorId(),
                 product.getCreatorName(),
                 product.getDueDate(),
-                product.getInitialStockQuantity()- product.getStockQuantity()
+                soldQuantity
         );
     }
 }
