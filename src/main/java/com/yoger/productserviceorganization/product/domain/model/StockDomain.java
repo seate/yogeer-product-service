@@ -2,8 +2,11 @@ package com.yoger.productserviceorganization.product.domain.model;
 
 import com.yoger.productserviceorganization.product.domain.exception.InsufficientStockException;
 import com.yoger.productserviceorganization.product.domain.exception.InvalidStockException;
+import lombok.AccessLevel;
+import lombok.Getter;
 
-public class StockDomain {
+@Getter(AccessLevel.PACKAGE)
+class StockDomain {
     private final int initialStockQuantity;
     private int stockQuantity;
 
@@ -29,13 +32,5 @@ public class StockDomain {
             throw new InsufficientStockException("재고 수량이 부족합니다.");
         }
         this.stockQuantity-=amount;
-    }
-
-    int getStockQuantity() {
-        return this.stockQuantity;
-    }
-
-    int getInitialStockQuantity() {
-        return this.initialStockQuantity;
     }
 }
