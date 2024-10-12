@@ -5,6 +5,7 @@ import com.yoger.productserviceorganization.product.domain.exception.InvalidStoc
 import lombok.AccessLevel;
 import lombok.Getter;
 
+//package-private 접근 제어로 패키지 밖에서는 이 StockDomain 클래스에 접근 불가
 @Getter(AccessLevel.PACKAGE)
 class StockDomain {
     private final int initialStockQuantity;
