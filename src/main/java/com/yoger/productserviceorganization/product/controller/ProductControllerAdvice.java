@@ -42,7 +42,7 @@ public class ProductControllerAdvice {
 
     @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String bookNotFoundHandler(ProductNotFoundException ex) {
+    String handleProductNotFoundException(ProductNotFoundException ex) {
         return ex.getMessage();
     }
 
