@@ -3,6 +3,7 @@ package com.yoger.productserviceorganization.product.controller;
 import com.yoger.productserviceorganization.product.domain.ProductService;
 import com.yoger.productserviceorganization.product.dto.request.DemoProductRequestDTO;
 import com.yoger.productserviceorganization.product.dto.response.DemoProductResponseDTO;
+import com.yoger.productserviceorganization.product.dto.response.SellableProductResponseDTO;
 import com.yoger.productserviceorganization.product.dto.response.SimpleDemoProductResponseDTO;
 import com.yoger.productserviceorganization.product.dto.response.SimpleSellableProductResponseDTO;
 import jakarta.validation.Valid;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +40,18 @@ public class ProductController {
     public ResponseEntity<List<SimpleDemoProductResponseDTO>> getDemoProducts() {
         List<SimpleDemoProductResponseDTO> demoProducts = productService.findSimpleDemoProducts();
         return ResponseEntity.ok(demoProducts);
+    }
+
+    @GetMapping("{productId}")
+    public ResponseEntity<SellableProductResponseDTO> getSellableProduct(@PathVariable Long productId) {
+        SellableProductResponseDTO sellableProductDTO = productService.findSellableProduct(productId);
+        return ResponseEntity.ok(sellableProductDTO);
+    }
+
+    @GetMapping("/demo/{productId}")
+    public ResponseEntity<DemoProductResponseDTO> getDemoProduct(@PathVariable Long productId) {
+        DemoProductResponseDTO sellableProductDTO = productService.findDemoProduct(productId);
+        return ResponseEntity.ok(sellableProductDTO);
     }
 }
 
