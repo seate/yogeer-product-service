@@ -1,4 +1,4 @@
-package com.yoger.productserviceorganization.product.persistence;
+package com.yoger.productserviceorganization.product.adapters.persistence.jpa;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

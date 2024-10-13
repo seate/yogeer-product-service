@@ -1,8 +1,9 @@
-package com.yoger.productserviceorganization.product.domain;
+package com.yoger.productserviceorganization.product.adapters;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.yoger.productserviceorganization.LocalStackS3Config;
+import com.yoger.productserviceorganization.product.adapters.s3.S3ImageStorageService;
 import com.yoger.productserviceorganization.product.config.AwsProperties;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,14 +33,14 @@ public class S3ServiceTests {
     @Autowired
     private AwsProperties awsProperties;
 
-    private S3Service s3Service;
+    private S3ImageStorageService s3Service;
     private static final String TEST_IMAGE_NAME = "test-image.jpeg";
     private static final String TEST_IMAGE_PATH = "test-image.jpeg";
     private static final String EXPECTED_URL_PATTERN = "https://test-bucket\\.s3\\.ap-northeast-2\\.amazonaws\\.com/[a-f0-9\\-]+_test-image\\.jpeg";
 
     @BeforeEach
     void setUp() {
-        s3Service = new S3Service(s3TestClient, awsProperties);
+        s3Service = new S3ImageStorageService(s3TestClient, awsProperties);
         // 버킷을 미리 생성
         s3TestClient.createBucket(CreateBucketRequest.builder().bucket(awsProperties.bucket()).build());
     }
