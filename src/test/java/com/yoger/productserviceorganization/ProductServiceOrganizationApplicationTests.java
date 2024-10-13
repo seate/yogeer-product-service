@@ -5,8 +5,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
 import com.yoger.productserviceorganization.product.config.AwsProperties;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;
-import com.yoger.productserviceorganization.product.dto.response.DemoProductResponseDTO;
-import com.yoger.productserviceorganization.product.dto.response.SimpleDemoProductResponseDTO;
+import com.yoger.productserviceorganization.product.adapters.web.dto.response.DemoProductResponseDTO;
+import com.yoger.productserviceorganization.product.adapters.web.dto.response.SimpleDemoProductResponseDTO;
 import java.io.IOException;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;

@@ -2,8 +2,8 @@ package com.yoger.productserviceorganization.product.mapper;
 
 import com.yoger.productserviceorganization.product.domain.model.Product;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;
-import com.yoger.productserviceorganization.product.dto.request.DemoProductRequestDTO;
-import com.yoger.productserviceorganization.product.persistence.ProductEntity;
+import com.yoger.productserviceorganization.product.adapters.web.dto.request.DemoProductRequestDTO;
+import com.yoger.productserviceorganization.product.adapters.persistence.jpa.ProductEntity;
 
 public class ProductMapper {
     public static ProductEntity toEntityFrom(Product product) {
