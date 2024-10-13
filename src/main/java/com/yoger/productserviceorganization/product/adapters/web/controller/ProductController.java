@@ -42,7 +42,7 @@ public class ProductController {
         return ResponseEntity.ok(demoProducts);
     }
 
-    @GetMapping("{productId}")
+    @GetMapping("/{productId}")
     public ResponseEntity<SellableProductResponseDTO> getSellableProduct(@PathVariable Long productId) {
         SellableProductResponseDTO sellableProductDTO = productService.findSellableProduct(productId);
         return ResponseEntity.ok(sellableProductDTO);
