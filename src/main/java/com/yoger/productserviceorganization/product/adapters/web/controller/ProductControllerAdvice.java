@@ -8,53 +8,47 @@ import com.yoger.productserviceorganization.product.domain.exception.ProductNotF
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ProductControllerAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        return errors;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errors);
     }
 
     @ExceptionHandler(InvalidStockException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleInvalidStockException(InvalidStockException ex) {
-        return ex.getMessage();
+    public ResponseEntity<String> handleInvalidStockException(InvalidStockException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
     @ExceptionHandler(InsufficientStockException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public String handleInsufficientStockException(InsufficientStockException ex) {
-        return ex.getMessage();
+    public ResponseEntity<String> handleInsufficientStockException(InsufficientStockException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
     @ExceptionHandler(ProductNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleProductNotFoundException(ProductNotFoundException ex) {
-        return ex.getMessage();
+    public ResponseEntity<String> handleProductNotFoundException(ProductNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @ExceptionHandler(InvalidTimeSetException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public String handleInvalidTimeSetException(InvalidTimeSetException ex) {
-        return ex.getMessage();
+    public ResponseEntity<String> handleInvalidTimeSetException(InvalidTimeSetException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 
     @ExceptionHandler(InvalidProductException.class)
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    public String handleInvalidProductException(InvalidProductException ex) {
-        return ex.getMessage();
+    public ResponseEntity<String> handleInvalidProductException(InvalidProductException ex) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
     }
 }
