@@ -1,5 +1,6 @@
-package com.yoger.productserviceorganization.product.config;
+package com.yoger.productserviceorganization.product.adapters.s3;
 
+import com.yoger.productserviceorganization.product.config.AwsProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

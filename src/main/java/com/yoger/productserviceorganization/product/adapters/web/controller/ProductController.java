@@ -1,11 +1,11 @@
-package com.yoger.productserviceorganization.product.controller;
+package com.yoger.productserviceorganization.product.adapters.web.controller;
 
-import com.yoger.productserviceorganization.product.domain.ProductService;
-import com.yoger.productserviceorganization.product.dto.request.DemoProductRequestDTO;
-import com.yoger.productserviceorganization.product.dto.response.DemoProductResponseDTO;
-import com.yoger.productserviceorganization.product.dto.response.SellableProductResponseDTO;
-import com.yoger.productserviceorganization.product.dto.response.SimpleDemoProductResponseDTO;
-import com.yoger.productserviceorganization.product.dto.response.SimpleSellableProductResponseDTO;
+import com.yoger.productserviceorganization.product.application.ProductService;
+import com.yoger.productserviceorganization.product.adapters.web.dto.request.DemoProductRequestDTO;
+import com.yoger.productserviceorganization.product.adapters.web.dto.response.DemoProductResponseDTO;
+import com.yoger.productserviceorganization.product.adapters.web.dto.response.SellableProductResponseDTO;
+import com.yoger.productserviceorganization.product.adapters.web.dto.response.SimpleDemoProductResponseDTO;
+import com.yoger.productserviceorganization.product.adapters.web.dto.response.SimpleSellableProductResponseDTO;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

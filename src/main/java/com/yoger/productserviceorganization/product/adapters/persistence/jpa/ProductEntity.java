@@ -1,4 +1,4 @@
-package com.yoger.productserviceorganization.product.persistence;
+package com.yoger.productserviceorganization.product.adapters.persistence.jpa;
 
 import com.yoger.productserviceorganization.product.domain.model.PriceByQuantity;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;

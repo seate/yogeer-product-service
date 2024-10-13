@@ -1,4 +1,4 @@
-package com.yoger.productserviceorganization.product.dto.response;
+package com.yoger.productserviceorganization.product.adapters.web.dto.response;
 
 import com.yoger.productserviceorganization.product.domain.model.Product;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;

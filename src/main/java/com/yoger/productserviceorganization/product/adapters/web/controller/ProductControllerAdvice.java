@@ -1,4 +1,4 @@
-package com.yoger.productserviceorganization.product.controller;
+package com.yoger.productserviceorganization.product.adapters.web.controller;
 
 import com.yoger.productserviceorganization.product.domain.exception.InsufficientStockException;
 import com.yoger.productserviceorganization.product.domain.exception.InvalidProductException;

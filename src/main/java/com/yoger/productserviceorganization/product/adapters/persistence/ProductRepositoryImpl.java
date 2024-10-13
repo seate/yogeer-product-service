@@ -1,5 +1,8 @@
-package com.yoger.productserviceorganization.product.persistence;
+package com.yoger.productserviceorganization.product.adapters.persistence;
 
+import com.yoger.productserviceorganization.product.adapters.persistence.jpa.JpaProductRepository;
+import com.yoger.productserviceorganization.product.adapters.persistence.jpa.ProductEntity;
+import com.yoger.productserviceorganization.product.domain.port.ProductRepository;
 import com.yoger.productserviceorganization.product.domain.exception.ProductNotFoundException;
 import com.yoger.productserviceorganization.product.domain.model.Product;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;

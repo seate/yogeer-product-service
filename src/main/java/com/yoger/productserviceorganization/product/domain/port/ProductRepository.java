@@ -1,4 +1,4 @@
-package com.yoger.productserviceorganization.product.persistence;
+package com.yoger.productserviceorganization.product.domain.port;
 
 import com.yoger.productserviceorganization.product.domain.model.Product;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;

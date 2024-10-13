@@ -1,6 +1,7 @@
-package com.yoger.productserviceorganization.product.domain;
+package com.yoger.productserviceorganization.product.adapters.s3;
 
 import com.yoger.productserviceorganization.product.config.AwsProperties;
+import com.yoger.productserviceorganization.product.domain.port.ImageStorageService;
 import java.io.IOException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,11 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 
 @Service
 @RequiredArgsConstructor
-public class S3Service {
+public class S3ImageStorageService implements ImageStorageService {
     private final S3Client s3Client;
     private final AwsProperties awsProperties;
 
+    @Override
     public String uploadImage(MultipartFile image) {
         String fileName = UUID.randomUUID() + "_" + image.getOriginalFilename();
         try {
