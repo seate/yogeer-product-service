@@ -42,19 +42,19 @@ public class ProductControllerAdvice {
 
     @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    String handleProductNotFoundException(ProductNotFoundException ex) {
+    public String handleProductNotFoundException(ProductNotFoundException ex) {
         return ex.getMessage();
     }
 
     @ExceptionHandler(InvalidTimeSetException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    String handleInvalidTimeSetException(InvalidTimeSetException ex) {
+    public String handleInvalidTimeSetException(InvalidTimeSetException ex) {
         return ex.getMessage();
     }
 
     @ExceptionHandler(InvalidProductException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    String handleInvalidProductException(InvalidProductException ex) {
+    public String handleInvalidProductException(InvalidProductException ex) {
         return ex.getMessage();
     }
 }

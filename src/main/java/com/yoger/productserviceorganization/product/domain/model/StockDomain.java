@@ -35,7 +35,7 @@ class StockDomain {
         this.stockQuantity-=amount;
     }
 
-    public void validateByState(ProductState state) {
+    void validateByState(ProductState state) {
         switch (state) {
             case SELLABLE -> validateSellableState();
             case DEMO -> validateDemoState();
