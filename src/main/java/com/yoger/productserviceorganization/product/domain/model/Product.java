@@ -9,12 +9,12 @@ import lombok.Getter;
 @Getter
 public class Product {
     private final Long id;
-    private final String name;
+    private String name;
     private final List<PriceByQuantity> priceByQuantities;
-    private final String description;
-    private final String imageUrl;
+    private String description;
+    private String imageUrl;
     private final ProductState state;
-    private final String thumbnailImageUrl;
+    private String thumbnailImageUrl;
     private final Long creatorId;
     private final String creatorName;
     private final LocalDateTime dueDate;
@@ -134,5 +134,21 @@ public class Product {
 
     private boolean isUnexpectedState(ProductState expectedState) {
         return !this.state.equals(expectedState);
+    }
+
+    public void updateName(String newName) {
+        this.name = newName;
+    }
+
+    public void updateDescription(String newDescription) {
+        this.description = newDescription;
+    }
+
+    public void updateImageUrl(String newImageUrl) {
+        this.imageUrl = newImageUrl;
+    }
+
+    public void updateThumbnailImageUrl(String newThumbnailImageUrl) {
+        this.thumbnailImageUrl = newThumbnailImageUrl;
     }
 }
