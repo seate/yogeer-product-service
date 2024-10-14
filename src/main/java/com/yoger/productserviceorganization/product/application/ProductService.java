@@ -1,5 +1,6 @@
 package com.yoger.productserviceorganization.product.application;
 
+import com.yoger.productserviceorganization.product.adapters.web.dto.request.UpdatedDemoProductRequestDTO;
 import com.yoger.productserviceorganization.product.domain.port.ProductRepository;
 import com.yoger.productserviceorganization.product.domain.model.Product;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;
@@ -60,6 +61,35 @@ public class ProductService {
     public DemoProductResponseDTO findDemoProduct(Long productId) {
         Product product = productRepository.findById(productId);
         product.validateUnexpectedState(ProductState.DEMO);
+        return DemoProductResponseDTO.from(product);
+    }
+
+    @Transactional
+    public DemoProductResponseDTO updateDemoProduct(Long productId,
+                                                    UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO) {
+        Product product = productRepository.findById(productId);
+        product.validateUnexpectedState(ProductState.DEMO);
+
+        if (updatedDemoProductRequestDTO.image() != null && !updatedDemoProductRequestDTO.image().isEmpty()) {
+            String newImageUrl = imageStorageService.uploadImage(updatedDemoProductRequestDTO.image());
+            imageStorageService.deleteImage(product.getImageUrl());
+            product.updateImageUrl(newImageUrl);
+        }
+
+        if (updatedDemoProductRequestDTO.thumbnailImage() != null && !updatedDemoProductRequestDTO.thumbnailImage().isEmpty()) {
+            String newThumbnailImageUrl = imageStorageService.uploadImage(updatedDemoProductRequestDTO.thumbnailImage());
+            imageStorageService.deleteImage(product.getThumbnailImageUrl());
+            product.updateThumbnailImageUrl(newThumbnailImageUrl);
+        }
+
+        if (updatedDemoProductRequestDTO.name() != null) {
+            product.updateName(updatedDemoProductRequestDTO.name());
+        }
+
+        if (updatedDemoProductRequestDTO.description() != null) {
+            product.updateDescription(updatedDemoProductRequestDTO.description());
+        }
+
         return DemoProductResponseDTO.from(product);
     }
 }
