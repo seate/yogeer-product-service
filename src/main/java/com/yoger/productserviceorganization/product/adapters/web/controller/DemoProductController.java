@@ -24,8 +24,8 @@ public class DemoProductController {
 
     @PostMapping
     public ResponseEntity<DemoProductResponseDTO> saveDemo(@Valid @ModelAttribute DemoProductRequestDTO demoProductRequestDTO) {
-        DemoProductResponseDTO savedProduct = productService.saveDemoProduct(demoProductRequestDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
+        DemoProductResponseDTO savedDemoProduct = productService.saveDemoProduct(demoProductRequestDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedDemoProduct);
     }
 
     @GetMapping
@@ -36,7 +36,7 @@ public class DemoProductController {
 
     @GetMapping("/{productId}")
     public ResponseEntity<DemoProductResponseDTO> getDemoProduct(@PathVariable Long productId) {
-        DemoProductResponseDTO sellableProductDTO = productService.findDemoProduct(productId);
-        return ResponseEntity.ok(sellableProductDTO);
+        DemoProductResponseDTO demoProductDTO = productService.findDemoProduct(productId);
+        return ResponseEntity.ok(demoProductDTO);
     }
 }
