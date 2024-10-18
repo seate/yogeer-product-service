@@ -73,11 +73,23 @@ class ProductServiceOrganizationApplicationTests {
 
     private DemoProductResponseDTO makeDemoTestProduct(MultipartBodyBuilder builder) {
         return webTestClient.post()
-                .uri("/api/products")
+                .uri("/api/products/demo")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .exchange()
                 .expectStatus().isCreated()
+                .expectBody(DemoProductResponseDTO.class)  // DTO로 응답 본문을 매핑
+                .returnResult()
+                .getResponseBody();
+    }
+
+    private DemoProductResponseDTO updateDemoTestProduct(Long id, MultipartBodyBuilder builder) {
+        return webTestClient.patch()
+                .uri("/api/products/demo/" + id)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
+                .exchange()
+                .expectStatus().isOk()
                 .expectBody(DemoProductResponseDTO.class)  // DTO로 응답 본문을 매핑
                 .returnResult()
                 .getResponseBody();
@@ -148,5 +160,33 @@ class ProductServiceOrganizationApplicationTests {
                         )
                 );
     }
-}
 
+    @Test
+    void whenDemoUpdatedThenUpdatedDemoProductReturned() {
+        // Given
+        MultipartBodyBuilder builder = getTestBodyBuilder();
+
+        // First, create a demo product
+        DemoProductResponseDTO originDemoProductResponseDTO = makeDemoTestProduct(builder);
+
+        MultipartBodyBuilder updateBuilder = new MultipartBodyBuilder();
+        updateBuilder.part("image", new ClassPathResource("updated-image.jpeg"))
+                .filename("updated-image.jpeg")
+                .contentType(MediaType.IMAGE_JPEG);
+
+        // When
+        DemoProductResponseDTO updatedDemoProductResponseDTO = updateDemoTestProduct(originDemoProductResponseDTO.id(), updateBuilder);
+
+        // Then
+        String expectedImageUrlPattern = String.format(
+                "https://%s\\.s3\\.%s\\.amazonaws\\.com/[a-f0-9\\-]+_updated-image\\.jpeg",
+                awsProperties.bucket(),
+                awsProperties.region()
+        );
+
+        assertThat(originDemoProductResponseDTO.name()).isEqualTo(updatedDemoProductResponseDTO.name());
+        assertThat(originDemoProductResponseDTO.description()).isEqualTo(updatedDemoProductResponseDTO.description());
+
+        assertThat(updatedDemoProductResponseDTO.imageUrl()).matches(expectedImageUrlPattern);
+    }
+}

@@ -11,7 +11,7 @@ public record DemoProductResponseDTO(
         Long creatorId,
         String creatorName,
         ProductState state
-        ) {
+) {
     public static DemoProductResponseDTO from(Product product) {
         return new DemoProductResponseDTO(
                 product.getId(),

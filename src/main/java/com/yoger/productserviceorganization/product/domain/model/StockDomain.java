@@ -32,7 +32,7 @@ class StockDomain {
         if (this.stockQuantity < amount) {
             throw new InsufficientStockException("재고 수량이 부족합니다.");
         }
-        this.stockQuantity-=amount;
+        this.stockQuantity -= amount;
     }
 
     void validateByState(ProductState state) {

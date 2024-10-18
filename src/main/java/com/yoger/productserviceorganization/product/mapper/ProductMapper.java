@@ -6,6 +6,8 @@ import com.yoger.productserviceorganization.product.adapters.web.dto.request.Dem
 import com.yoger.productserviceorganization.product.adapters.persistence.jpa.ProductEntity;
 
 public class ProductMapper {
+    private ProductMapper() {}
+
     public static ProductEntity toEntityFrom(Product product) {
         return ProductEntity.of(
                 product.getName(),

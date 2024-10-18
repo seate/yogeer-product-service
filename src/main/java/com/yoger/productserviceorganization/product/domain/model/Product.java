@@ -9,12 +9,12 @@ import lombok.Getter;
 @Getter
 public class Product {
     private final Long id;
-    private final String name;
+    private String name;
     private final List<PriceByQuantity> priceByQuantities;
-    private final String description;
-    private final String imageUrl;
+    private String description;
+    private String imageUrl;
     private final ProductState state;
-    private final String thumbnailImageUrl;
+    private String thumbnailImageUrl;
     private final Long creatorId;
     private final String creatorName;
     private final LocalDateTime dueDate;
@@ -34,16 +34,16 @@ public class Product {
             StockDomain stockDomain
     ) {
         this.id = id;
-        this.name=name;
-        this.priceByQuantities=priceByQuantities;
-        this.description=description;
+        this.name = name;
+        this.priceByQuantities = priceByQuantities;
+        this.description = description;
         this.imageUrl = imageUrl;
-        this.state=state;
-        this.thumbnailImageUrl=thumbnailImageUrl;
-        this.creatorId=creatorId;
-        this.creatorName=creatorName;
-        this.dueDate=dueDate;
-        this.stockDomain=stockDomain;
+        this.state = state;
+        this.thumbnailImageUrl = thumbnailImageUrl;
+        this.creatorId = creatorId;
+        this.creatorName = creatorName;
+        this.dueDate = dueDate;
+        this.stockDomain = stockDomain;
     }
 
     // 정적 팩토리 메서드
@@ -79,7 +79,8 @@ public class Product {
         );
     }
 
-    private static void validateFieldsByState(ProductState state, List<PriceByQuantity> priceByQuantities, LocalDateTime dueDate) {
+    private static void validateFieldsByState(ProductState state, List<PriceByQuantity> priceByQuantities,
+                                              LocalDateTime dueDate) {
         switch (state) {
             case SELLABLE -> validateFieldsInSellableState(priceByQuantities, dueDate);
             case DEMO -> validateFieldsInDemoState(priceByQuantities, dueDate);
@@ -90,13 +91,12 @@ public class Product {
         }
     }
 
-
     private static void validateFieldsInSellableState(List<PriceByQuantity> priceByQuantities, LocalDateTime dueDate) {
         //판매 가능 상품 필드들에 대해 필요한 유효성 검증 로직 작성
         if (priceByQuantities == null || priceByQuantities.isEmpty()) {
             throw new InvalidProductException("판매 가능 상품에 가격 정보가 비어 있을 수 없습니다.");
         }
-        if(dueDate==null) {
+        if (dueDate == null) {
             throw new InvalidTimeSetException("판매 가능 상품은 기한이 필요합니다.");
         }
         if (dueDate.isBefore(LocalDateTime.now())) {
@@ -106,10 +106,10 @@ public class Product {
 
     private static void validateFieldsInDemoState(List<PriceByQuantity> priceByQuantities, LocalDateTime dueDate) {
         //데모 상품 필드들에 대해 필요한 유효성 검증 로직 작성
-        if(priceByQuantities!=null) {
+        if (priceByQuantities != null) {
             throw new InvalidProductException("데모 상품은 가격 정보를 가질 수 없습니다.");
         }
-        if(dueDate!=null) {
+        if (dueDate != null) {
             throw new InvalidTimeSetException("데모 상품은 기한을 가질 수 없습니다.");
         }
     }
@@ -127,12 +127,28 @@ public class Product {
     }
 
     public void validateUnexpectedState(ProductState expectedState) {
-        if(isUnexpectedState(expectedState)) {
+        if (isUnexpectedState(expectedState)) {
             throw new InvalidProductException("상품이 예상된 상태가 아닙니다.");
         }
     }
 
     private boolean isUnexpectedState(ProductState expectedState) {
         return !this.state.equals(expectedState);
+    }
+
+    public void updateName(String newName) {
+        this.name = newName;
+    }
+
+    public void updateDescription(String newDescription) {
+        this.description = newDescription;
+    }
+
+    public void updateImageUrl(String newImageUrl) {
+        this.imageUrl = newImageUrl;
+    }
+
+    public void updateThumbnailImageUrl(String newThumbnailImageUrl) {
+        this.thumbnailImageUrl = newThumbnailImageUrl;
     }
 }
