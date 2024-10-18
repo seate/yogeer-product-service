@@ -26,7 +26,8 @@ public class DemoProductController {
 
     @PostMapping
     public ResponseEntity<DemoProductResponseDTO> saveDemo(
-            @Valid @ModelAttribute DemoProductRequestDTO demoProductRequestDTO) {
+            @Valid @ModelAttribute DemoProductRequestDTO demoProductRequestDTO
+    ) {
         DemoProductResponseDTO savedDemoProduct = productService.saveDemoProduct(demoProductRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedDemoProduct);
     }
@@ -44,8 +45,10 @@ public class DemoProductController {
     }
 
     @PatchMapping("/{productId}")
-    public ResponseEntity<DemoProductResponseDTO> updateDemoProduct(@PathVariable Long productId,
-                                                                    @Valid @ModelAttribute UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO) {
+    public ResponseEntity<DemoProductResponseDTO> updateDemoProduct(
+            @PathVariable Long productId,
+            @Valid @ModelAttribute UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO
+    ) {
         DemoProductResponseDTO updatedProduct = productService.updateDemoProduct(productId,
                 updatedDemoProductRequestDTO);
         return ResponseEntity.ok(updatedProduct);
