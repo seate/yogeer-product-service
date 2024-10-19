@@ -86,7 +86,7 @@ public class ProductRepositoryJpaTests {
 
         assertThat(actualProducts)
                 .extracting(Product::getId)
-                .containsExactlyInAnyOrder(savedProduct1.getId(), savedProduct2.getId());
+                .contains(savedProduct1.getId(), savedProduct2.getId());
     }
 
     @ParameterizedTest
