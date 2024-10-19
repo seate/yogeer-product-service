@@ -128,8 +128,12 @@ class ProductServiceOrganizationApplicationTests {
                 .contentType(MediaType.IMAGE_JPEG);
 
         // When
-        DemoProductResponseDTO updatedDemoProductResponseDTO = applicationUtil.updateDemoTestProduct(originDemoProductResponseDTO.id(),
-                updateBuilder);
+        DemoProductResponseDTO updatedDemoProductResponseDTO =
+                applicationUtil.updateDemoTestProduct(
+                        originDemoProductResponseDTO.id(),
+                        originDemoProductResponseDTO.creatorId(),
+                        updateBuilder
+                );
 
         // Then
         String expectedImageUrlPattern = String.format(

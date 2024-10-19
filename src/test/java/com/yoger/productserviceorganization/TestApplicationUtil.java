@@ -53,9 +53,10 @@ class TestApplicationUtil {
                 .getResponseBody();
     }
 
-    DemoProductResponseDTO updateDemoTestProduct(Long id, MultipartBodyBuilder builder) {
+    DemoProductResponseDTO updateDemoTestProduct(Long id, Long creatorId, MultipartBodyBuilder builder) {
         return webTestClient.patch()
                 .uri("/api/products/demo/" + id)
+                .header("user_id", String.valueOf(creatorId))
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .exchange()
