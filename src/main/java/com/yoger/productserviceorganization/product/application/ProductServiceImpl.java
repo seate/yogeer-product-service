@@ -98,7 +98,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional
-    public void deleteProduct(Long productId, Long creatorId) {
+    public void deleteDemoProduct(Long productId, Long creatorId) {
         Product product = productRepository.findById(productId);
         if (!Objects.equals(product.getCreatorId(), creatorId)) {
             throw new ProductCreatorMismatchException("상품의 생성자 ID가 일치하지 않습니다.");

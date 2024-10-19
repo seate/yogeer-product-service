@@ -61,7 +61,7 @@ public class DemoProductController {
             @PathVariable Long productId,
             @RequestHeader(value = "user_id") Long creatorId
     ) {
-        productService.deleteProduct(productId, creatorId);
+        productService.deleteDemoProduct(productId, creatorId);
         return ResponseEntity.noContent().build();
     }
 }

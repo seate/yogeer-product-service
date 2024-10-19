@@ -22,5 +22,5 @@ public interface ProductService {
 
     DemoProductResponseDTO updateDemoProduct(Long productId, UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO);
 
-    void deleteProduct(Long productId, Long creatorId);
+    void deleteDemoProduct(Long productId, Long creatorId);
 }
