@@ -11,9 +11,16 @@ import java.util.List;
 
 public interface ProductService {
     List<SimpleSellableProductResponseDTO> findSimpleSellableProducts();
+
     DemoProductResponseDTO saveDemoProduct(@Valid DemoProductRequestDTO demoProductRequestDTO);
+
     List<SimpleDemoProductResponseDTO> findSimpleDemoProducts();
+
     SellableProductResponseDTO findSellableProduct(Long productId);
+
     DemoProductResponseDTO findDemoProduct(Long productId);
+
     DemoProductResponseDTO updateDemoProduct(Long productId, UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO);
+
+    void deleteProduct(Long productId, Long creatorId);
 }
