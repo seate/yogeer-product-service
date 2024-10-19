@@ -67,10 +67,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional
-    public DemoProductResponseDTO updateDemoProduct(Long productId,
-                                                    UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO) {
+    public DemoProductResponseDTO updateDemoProduct(
+            Long productId,
+            Long creatorId,
+            UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO
+    ) {
         Product product = productRepository.findById(productId);
         product.validateUnexpectedState(ProductState.DEMO);
+        product.validateCreatorId(creatorId);
 
         if (updatedDemoProductRequestDTO.image() != null && !updatedDemoProductRequestDTO.image().isEmpty()) {
             String newImageUrl = imageStorageService.uploadImage(updatedDemoProductRequestDTO.image());

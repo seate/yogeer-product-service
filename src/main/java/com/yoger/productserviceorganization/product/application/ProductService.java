@@ -20,7 +20,7 @@ public interface ProductService {
 
     DemoProductResponseDTO findDemoProduct(Long productId);
 
-    DemoProductResponseDTO updateDemoProduct(Long productId, UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO);
+    DemoProductResponseDTO updateDemoProduct(Long productId, Long creatorId, UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO);
 
     void deleteDemoProduct(Long productId, Long creatorId);
 }

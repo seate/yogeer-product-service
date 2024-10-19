@@ -49,10 +49,11 @@ public class DemoProductController {
     @PatchMapping("/{productId}")
     public ResponseEntity<DemoProductResponseDTO> updateDemoProduct(
             @PathVariable Long productId,
+            @RequestHeader(value = "user_id") Long creatorId,
             @Valid @ModelAttribute UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO
     ) {
-        DemoProductResponseDTO updatedProduct = productService.updateDemoProduct(productId,
-                updatedDemoProductRequestDTO);
+        DemoProductResponseDTO updatedProduct =
+                productService.updateDemoProduct(productId, creatorId, updatedDemoProductRequestDTO);
         return ResponseEntity.ok(updatedProduct);
     }
 
