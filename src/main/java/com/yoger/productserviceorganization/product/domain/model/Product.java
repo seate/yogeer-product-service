@@ -2,6 +2,7 @@ package com.yoger.productserviceorganization.product.domain.model;
 
 import com.yoger.productserviceorganization.product.domain.exception.InvalidProductException;
 import com.yoger.productserviceorganization.product.domain.exception.InvalidTimeSetException;
+import com.yoger.productserviceorganization.product.domain.exception.ProductCreatorMismatchException;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Getter;
@@ -150,5 +151,15 @@ public class Product {
 
     public void updateThumbnailImageUrl(String newThumbnailImageUrl) {
         this.thumbnailImageUrl = newThumbnailImageUrl;
+    }
+
+    public void validateCreatorId(Long creatorId) {
+        if (isInvalidCreatorId(creatorId)) {
+            throw new ProductCreatorMismatchException("상품의 생성자 ID가 일치하지 않습니다.");
+        }
+    }
+
+    private boolean isInvalidCreatorId(Long creatorId) {
+        return !this.creatorId.equals(creatorId);
     }
 }
