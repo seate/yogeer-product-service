@@ -12,7 +12,6 @@ import com.yoger.productserviceorganization.product.domain.model.ProductState;
 import jakarta.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -84,12 +83,6 @@ public class ProductRepositoryJpaTests {
         Product savedProduct2 = productRepository.save(product2);
 
         List<Product> actualProducts = productRepository.findAll();
-
-        assertThat(actualProducts.parallelStream()
-                .filter(productEntity ->
-                        productEntity.getId().equals(savedProduct1.getId()) ||
-                                productEntity.getId().equals(savedProduct2.getId()))
-                .collect(Collectors.toList())).hasSize(2);
 
         assertThat(actualProducts)
                 .extracting(Product::getId)
