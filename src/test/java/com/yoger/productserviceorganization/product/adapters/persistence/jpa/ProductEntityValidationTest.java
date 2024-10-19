@@ -33,6 +33,7 @@ public class ProductEntityValidationTest {
     @DisplayName("유효한 ProductEntity 생성 - 검증 통과")
     void validProductEntityCreation() {
         ProductEntity productEntity = ProductEntity.of(
+                null,
                 "유효한상품이름",
                 priceByQuantities,
                 "상품에 대한 설명입니다.",
@@ -54,6 +55,7 @@ public class ProductEntityValidationTest {
     @DisplayName("상품 이름이 짧을 경우 - 검증 실패")
     void productNameTooShort() {
         ProductEntity productEntity = ProductEntity.of(
+                null,
                 "짧",
                 priceByQuantities,
                 "상품에 대한 설명입니다.",
@@ -76,6 +78,7 @@ public class ProductEntityValidationTest {
     @DisplayName("상품 이름에 허용되지 않은 특수 문자가 포함된 경우 - 검증 실패")
     void productNameWithInvalidCharacters() {
         ProductEntity productEntity = ProductEntity.of(
+                null,
                 "잘못된#상품이름!",
                 priceByQuantities,
                 "상품에 대한 설명입니다.",
@@ -98,6 +101,7 @@ public class ProductEntityValidationTest {
     @DisplayName("상품 설명이 너무 짧을 경우 - 검증 실패")
     void productDescriptionTooShort() {
         ProductEntity productEntity = ProductEntity.of(
+                null,
                 "유효한상품이름",
                 priceByQuantities,
                 "짧음",
@@ -120,6 +124,7 @@ public class ProductEntityValidationTest {
     @DisplayName("유효하지 않은 S3 URL일 경우 - 검증 실패")
     void productInvalidS3Url() {
         ProductEntity productEntity = ProductEntity.of(
+                null,
                 "유효한상품이름",
                 priceByQuantities,
                 "상품에 대한 설명입니다.",
@@ -142,6 +147,7 @@ public class ProductEntityValidationTest {
     @DisplayName("ProductState가 null일 경우 - 검증 실패")
     void productStateNull() {
         ProductEntity productEntity = ProductEntity.of(
+                null,
                 "유효한상품이름",
                 priceByQuantities,
                 "상품에 대한 설명입니다.",
