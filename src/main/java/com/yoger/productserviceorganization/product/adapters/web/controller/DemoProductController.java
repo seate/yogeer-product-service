@@ -10,11 +10,13 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,5 +54,14 @@ public class DemoProductController {
         DemoProductResponseDTO updatedProduct = productService.updateDemoProduct(productId,
                 updatedDemoProductRequestDTO);
         return ResponseEntity.ok(updatedProduct);
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<String> deleteDemoProduct(
+            @PathVariable Long productId,
+            @RequestHeader(value = "user_id") Long creatorId
+    ) {
+        productService.deleteProduct(productId, creatorId);
+        return ResponseEntity.noContent().build();
     }
 }
