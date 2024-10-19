@@ -43,4 +43,9 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .map(ProductMapper::toDomainFrom)
                 .toList();  //toList() 메서드는 불변 리스트를 반환 만약 변경 해야하는 상황이 발생하면 수정 필요
     }
+
+    @Override
+    public void deleteById(Long productId) {
+        jpaProductRepository.deleteById(productId);
+    }
 }
