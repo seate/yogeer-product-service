@@ -96,8 +96,8 @@ public class ProductServiceImpl implements ProductService {
             product.updateDescription(updatedDemoProductRequestDTO.description());
         }
 
-        productRepository.save(product);
-        return DemoProductResponseDTO.from(product);
+        Product savedProduct = productRepository.save(product);
+        return DemoProductResponseDTO.from(savedProduct);
     }
 
     @Transactional
