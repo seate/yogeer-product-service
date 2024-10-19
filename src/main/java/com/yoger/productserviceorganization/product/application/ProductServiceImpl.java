@@ -1,6 +1,7 @@
 package com.yoger.productserviceorganization.product.application;
 
 import com.yoger.productserviceorganization.product.adapters.web.dto.request.UpdatedDemoProductRequestDTO;
+import com.yoger.productserviceorganization.product.domain.exception.ProductCreatorMismatchException;
 import com.yoger.productserviceorganization.product.domain.port.ProductRepository;
 import com.yoger.productserviceorganization.product.domain.model.Product;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;
@@ -13,6 +14,7 @@ import com.yoger.productserviceorganization.product.adapters.web.dto.response.Si
 import com.yoger.productserviceorganization.product.mapper.ProductMapper;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -93,5 +95,16 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return DemoProductResponseDTO.from(product);
+    }
+
+    @Transactional
+    public void deleteProduct(Long productId, Long creatorId) {
+        Product product = productRepository.findById(productId);
+        if (!Objects.equals(product.getCreatorId(), creatorId)) {
+            throw new ProductCreatorMismatchException("상품의 생성자 ID가 일치하지 않습니다.");
+        }
+        imageStorageService.deleteImage(product.getImageUrl());
+        imageStorageService.deleteImage(product.getThumbnailImageUrl());
+        productRepository.deleteById(productId);
     }
 }

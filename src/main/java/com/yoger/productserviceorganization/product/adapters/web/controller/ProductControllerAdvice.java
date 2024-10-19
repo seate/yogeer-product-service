@@ -4,6 +4,7 @@ import com.yoger.productserviceorganization.product.domain.exception.Insufficien
 import com.yoger.productserviceorganization.product.domain.exception.InvalidProductException;
 import com.yoger.productserviceorganization.product.domain.exception.InvalidStockException;
 import com.yoger.productserviceorganization.product.domain.exception.InvalidTimeSetException;
+import com.yoger.productserviceorganization.product.domain.exception.ProductCreatorMismatchException;
 import com.yoger.productserviceorganization.product.domain.exception.ProductNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,5 +51,10 @@ public class ProductControllerAdvice {
     @ExceptionHandler(InvalidProductException.class)
     public ResponseEntity<String> handleInvalidProductException(InvalidProductException ex) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(ProductCreatorMismatchException.class)
+    public ResponseEntity<String> handleCreatorMismatch(ProductCreatorMismatchException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
 }
