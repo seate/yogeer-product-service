@@ -10,6 +10,7 @@ public class ProductMapper {
 
     public static ProductEntity toEntityFrom(Product product) {
         return ProductEntity.of(
+                product.getId(),
                 product.getName(),
                 product.getPriceByQuantities(),
                 product.getDescription(),

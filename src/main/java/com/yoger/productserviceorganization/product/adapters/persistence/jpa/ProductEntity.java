@@ -96,6 +96,7 @@ public class ProductEntity {
      * 존재하지 않기 때문에 작성하지 않음
      */
     public static ProductEntity of(
+            Long id,
             String name,
             List<PriceByQuantity> priceByQuantities,
             String description,
@@ -109,7 +110,7 @@ public class ProductEntity {
             int stockQuantity
     ) {
         return new ProductEntity(
-                null,
+                id,
                 name,
                 priceByQuantities,
                 description,
