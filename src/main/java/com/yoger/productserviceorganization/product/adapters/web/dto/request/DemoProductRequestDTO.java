@@ -1,6 +1,5 @@
 package com.yoger.productserviceorganization.product.adapters.web.dto.request;
 
-import com.yoger.productserviceorganization.product.adapters.web.dto.validation.NotEmptyFile;
 import com.yoger.productserviceorganization.product.adapters.web.dto.validation.ValidImage;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -21,11 +20,9 @@ public record DemoProductRequestDTO(
         @Size(min = 10, max = 500, message = "상품 상세 설명은 10글자 이상 500글자 이하만 가능합니다.")
         String description,
 
-        @NotEmptyFile
         @ValidImage
         MultipartFile image,
 
-        @NotEmptyFile
         @ValidImage
         MultipartFile thumbnailImage,
 

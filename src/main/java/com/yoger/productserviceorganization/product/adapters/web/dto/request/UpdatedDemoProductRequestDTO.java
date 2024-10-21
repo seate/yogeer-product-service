@@ -16,10 +16,10 @@ public record UpdatedDemoProductRequestDTO(
         @Size(min = 10, max = 500, message = "상품 상세 설명은 10글자 이상 500글자 이하만 가능합니다.")
         String description,
 
-        @ValidImage
+        @ValidImage(emptyable = true)
         MultipartFile image,
 
-        @ValidImage
+        @ValidImage(emptyable = true)
         MultipartFile thumbnailImage
 ) {
 }
