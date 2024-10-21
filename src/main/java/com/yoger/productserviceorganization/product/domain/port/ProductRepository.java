@@ -6,7 +6,12 @@ import java.util.List;
 
 public interface ProductRepository {
     Product findById(Long id);
+
     Product save(Product product);
+
     List<Product> findByState(ProductState state);
+
     List<Product> findAll();
+
+    void deleteById(Long productId);
 }

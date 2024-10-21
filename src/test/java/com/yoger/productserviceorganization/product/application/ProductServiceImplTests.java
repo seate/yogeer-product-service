@@ -18,9 +18,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductServiceTests {
+public class ProductServiceImplTests {
     @InjectMocks
-    private ProductService productService; // 테스트할 대상
+    private ProductServiceImpl productService; // 테스트할 대상
 
     @Mock
     private ProductRepository productRepository; // 목 객체
