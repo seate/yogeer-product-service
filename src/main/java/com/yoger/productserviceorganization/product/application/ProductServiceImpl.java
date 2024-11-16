@@ -112,4 +112,11 @@ public class ProductServiceImpl implements ProductService {
         imageStorageService.deleteImage(product.getThumbnailImageUrl());
         productRepository.deleteById(productId);
     }
+
+    @Transactional
+    public void changeSellableProductStock(Long productId, Integer quantity) {
+        Product product = productRepository.findById(productId);
+        product.changeStockQuantity(quantity);
+        productRepository.save(product);
+    }
 }
