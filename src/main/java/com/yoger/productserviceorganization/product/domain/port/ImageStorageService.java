@@ -6,4 +6,6 @@ public interface ImageStorageService {
     String uploadImage(MultipartFile image);
 
     void deleteImage(String imageUrl);
+
+    String updateImage(MultipartFile image, String originImageUrl);
 }

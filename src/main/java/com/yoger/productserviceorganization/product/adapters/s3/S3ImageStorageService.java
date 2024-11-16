@@ -79,4 +79,14 @@ public class S3ImageStorageService implements ImageStorageService {
             throw new RuntimeException("파일 삭제 중 오류 발생: " + e.getMessage(), e);
         }
     }
+
+    @Override
+    public String updateImage(MultipartFile image, String originImageUrl) {
+        if (image != null && !image.isEmpty()) {
+            String newImageUrl = uploadImage(image);
+            deleteImage(originImageUrl);
+            return newImageUrl;
+        }
+        return originImageUrl;
+    }
 }
