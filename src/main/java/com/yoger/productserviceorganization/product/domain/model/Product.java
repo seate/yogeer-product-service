@@ -19,7 +19,7 @@ public class Product {
     private final Long creatorId;
     private final String creatorName;
     private final LocalDateTime dueDate;
-    private final StockDomain stockDomain;
+    private final Stock stock;
 
     private Product(
             Long id,
@@ -32,7 +32,7 @@ public class Product {
             Long creatorId,
             String creatorName,
             LocalDateTime dueDate,
-            StockDomain stockDomain
+            Stock stock
     ) {
         this.id = id;
         this.name = name;
@@ -44,7 +44,7 @@ public class Product {
         this.creatorId = creatorId;
         this.creatorName = creatorName;
         this.dueDate = dueDate;
-        this.stockDomain = stockDomain;
+        this.stock = stock;
     }
 
     // 정적 팩토리 메서드
@@ -63,8 +63,8 @@ public class Product {
             int stockQuantity
     ) {
         validateFieldsByState(state, priceByQuantities, dueDate);
-        StockDomain stockDomain = new StockDomain(initialStockQuantity, stockQuantity);
-        stockDomain.validateByState(state);
+        Stock stock = new Stock(initialStockQuantity, stockQuantity);
+        stock.validateByState(state);
         return new Product(
                 id,
                 name,
@@ -76,7 +76,7 @@ public class Product {
                 creatorId,
                 creatorName,
                 dueDate,
-                stockDomain
+                stock
         );
     }
 
@@ -98,7 +98,7 @@ public class Product {
                 existingProduct.getCreatorId(),
                 existingProduct.getCreatorName(),
                 existingProduct.getDueDate(),
-                existingProduct.getStockDomain()
+                existingProduct.getStock()
         );
     }
 
@@ -137,16 +137,17 @@ public class Product {
         }
     }
 
-    public void decreaseStockQuantity(int amount) {
-        this.stockDomain.decrease(amount);
+    public void changeStockQuantity(Integer amount) {
+        validateUnexpectedState(ProductState.SELLABLE);
+        this.stock.change(amount);
     }
 
     public int getStockQuantity() {
-        return stockDomain.getStockQuantity();
+        return stock.getStockQuantity();
     }
 
     public int getInitialStockQuantity() {
-        return stockDomain.getInitialStockQuantity();
+        return stock.getInitialStockQuantity();
     }
 
     public void validateUnexpectedState(ProductState expectedState) {
