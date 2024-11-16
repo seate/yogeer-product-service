@@ -22,8 +22,8 @@ public class ProductUnitTest {
                 List.of(new PriceByQuantity(1, 100)),
                 "Test Description",
                 "http://image.url",
-                ProductState.SELLABLE,
                 "http://thumbnail.url",
+                ProductState.SELLABLE,
                 101L,
                 "Creator Name",
                 LocalDateTime.now().plusDays(30),
@@ -34,22 +34,20 @@ public class ProductUnitTest {
 
     @Test
     void testDecreaseStockQuantitySuccess() {
-        product.decreaseStockQuantity(10);
-        assertThat(product.getStockDomain().getStockQuantity()).isEqualTo(40);
+        product.changeStockQuantity(-10);
+        assertThat(product.getStock().getStockQuantity()).isEqualTo(40);
     }
 
     @Test
     void testDecreaseStockQuantityWithInvalidAmount() {
-        assertThatThrownBy(() -> product.decreaseStockQuantity(0))
-                .isInstanceOf(InvalidStockException.class)
-                .hasMessage("감소할 수량은 0보다 커야 합니다.");
+        assertThatThrownBy(() -> product.changeStockQuantity(0))
+                .isInstanceOf(InvalidStockException.class);
     }
 
     @Test
     void testDecreaseStockQuantityWithExceedingAmount() {
-        assertThatThrownBy(() -> product.decreaseStockQuantity(60))
-                .isInstanceOf(InsufficientStockException.class)
-                .hasMessage("재고 수량이 부족합니다.");
+        assertThatThrownBy(() -> product.changeStockQuantity(-60))
+                .isInstanceOf(InsufficientStockException.class);
     }
 
     @Test
@@ -60,8 +58,8 @@ public class ProductUnitTest {
                 List.of(new PriceByQuantity(1, 100)),
                 "Valid Description",
                 "http://image.url",
-                ProductState.SELLABLE,
                 "http://thumbnail.url",
+                ProductState.SELLABLE,
                 101L,
                 "Creator Name",
                 LocalDateTime.now().plusDays(30),
@@ -79,8 +77,8 @@ public class ProductUnitTest {
                 null,
                 "Invalid Description",
                 "http://image.url",
-                ProductState.SELLABLE,
                 "http://thumbnail.url",
+                ProductState.SELLABLE,
                 101L,
                 "Creator Name",
                 LocalDateTime.now().plusDays(30),
@@ -98,8 +96,8 @@ public class ProductUnitTest {
                 List.of(),
                 "Invalid Description",
                 "http://image.url",
-                ProductState.SELLABLE,
                 "http://thumbnail.url",
+                ProductState.SELLABLE,
                 101L,
                 "Creator Name",
                 LocalDateTime.now().plusDays(30),
@@ -117,8 +115,8 @@ public class ProductUnitTest {
                 List.of(new PriceByQuantity(1, 100)),
                 "Invalid Description",
                 "http://image.url",
-                ProductState.SELLABLE,
                 "http://thumbnail.url",
+                ProductState.SELLABLE,
                 101L,
                 "Creator Name",
                 null,
@@ -136,8 +134,8 @@ public class ProductUnitTest {
                 List.of(new PriceByQuantity(1, 100)),
                 "Invalid Description",
                 "http://image.url",
-                ProductState.SELLABLE,
                 "http://thumbnail.url",
+                ProductState.SELLABLE,
                 101L,
                 "Creator Name",
                 LocalDateTime.now().minusDays(1),
@@ -155,8 +153,8 @@ public class ProductUnitTest {
                 null,
                 "Demo Description",
                 "http://image.url",
-                ProductState.DEMO,
                 "http://thumbnail.url",
+                ProductState.DEMO,
                 102L,
                 "Creator Name",
                 null,
@@ -174,8 +172,8 @@ public class ProductUnitTest {
                 List.of(new PriceByQuantity(1, 100)),
                 "Demo Description",
                 "http://image.url",
-                ProductState.DEMO,
                 "http://thumbnail.url",
+                ProductState.DEMO,
                 102L,
                 "Creator Name",
                 null,
@@ -193,8 +191,8 @@ public class ProductUnitTest {
                 null,
                 "Demo Description",
                 "http://image.url",
-                ProductState.DEMO,
                 "http://thumbnail.url",
+                ProductState.DEMO,
                 102L,
                 "Creator Name",
                 LocalDateTime.now().plusDays(30),

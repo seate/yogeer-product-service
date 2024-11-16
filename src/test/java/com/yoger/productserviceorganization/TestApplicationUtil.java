@@ -56,7 +56,7 @@ class TestApplicationUtil {
     DemoProductResponseDTO updateDemoTestProduct(Long id, Long creatorId, MultipartBodyBuilder builder) {
         return webTestClient.patch()
                 .uri("/api/products/demo/" + id)
-                .header("user_id", String.valueOf(creatorId))
+                .header("user-id", String.valueOf(creatorId))
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .exchange()
@@ -69,7 +69,7 @@ class TestApplicationUtil {
     void deleteDemoTestProduct(Long productId, Long creatorId) {
         webTestClient.delete()
                 .uri("/api/products/demo/" + productId)
-                .header("user_id", String.valueOf(creatorId))
+                .header("user-id", String.valueOf(creatorId))
                 .exchange()
                 .expectStatus().isNoContent()
                 .expectBody().isEmpty();
