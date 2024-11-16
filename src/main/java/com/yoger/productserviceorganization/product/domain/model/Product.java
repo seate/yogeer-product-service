@@ -10,12 +10,12 @@ import lombok.Getter;
 @Getter
 public class Product {
     private final Long id;
-    private String name;
+    private final String name;
     private final List<PriceByQuantity> priceByQuantities;
-    private String description;
-    private String imageUrl;
+    private final String description;
+    private final String imageUrl;
+    private final String thumbnailImageUrl;
     private final ProductState state;
-    private String thumbnailImageUrl;
     private final Long creatorId;
     private final String creatorName;
     private final LocalDateTime dueDate;
@@ -27,8 +27,8 @@ public class Product {
             List<PriceByQuantity> priceByQuantities,
             String description,
             String imageUrl,
-            ProductState state,
             String thumbnailImageUrl,
+            ProductState state,
             Long creatorId,
             String creatorName,
             LocalDateTime dueDate,
@@ -39,8 +39,8 @@ public class Product {
         this.priceByQuantities = priceByQuantities;
         this.description = description;
         this.imageUrl = imageUrl;
-        this.state = state;
         this.thumbnailImageUrl = thumbnailImageUrl;
+        this.state = state;
         this.creatorId = creatorId;
         this.creatorName = creatorName;
         this.dueDate = dueDate;
@@ -54,8 +54,8 @@ public class Product {
             List<PriceByQuantity> priceByQuantities,
             String description,
             String imageUrl,
-            ProductState state,
             String thumbnailImageUrl,
+            ProductState state,
             Long creatorId,
             String creatorName,
             LocalDateTime dueDate,
@@ -71,12 +71,34 @@ public class Product {
                 priceByQuantities,
                 description,
                 imageUrl,
-                state,
                 thumbnailImageUrl,
+                state,
                 creatorId,
                 creatorName,
                 dueDate,
                 stockDomain
+        );
+    }
+
+    public static Product updatedDemoProduct(
+            Product existingProduct,
+            String updatedName,
+            String updatedDescription,
+            String updatedImageUrl,
+            String updatedThumbnailImageUrl
+    ) {
+        return new Product(
+                existingProduct.getId(),
+                updatedName,
+                existingProduct.getPriceByQuantities(),
+                updatedDescription,
+                updatedImageUrl,
+                updatedThumbnailImageUrl,
+                existingProduct.getState(),
+                existingProduct.getCreatorId(),
+                existingProduct.getCreatorName(),
+                existingProduct.getDueDate(),
+                existingProduct.getStockDomain()
         );
     }
 
@@ -135,22 +157,6 @@ public class Product {
 
     private boolean isUnexpectedState(ProductState expectedState) {
         return !this.state.equals(expectedState);
-    }
-
-    public void updateName(String newName) {
-        this.name = newName;
-    }
-
-    public void updateDescription(String newDescription) {
-        this.description = newDescription;
-    }
-
-    public void updateImageUrl(String newImageUrl) {
-        this.imageUrl = newImageUrl;
-    }
-
-    public void updateThumbnailImageUrl(String newThumbnailImageUrl) {
-        this.thumbnailImageUrl = newThumbnailImageUrl;
     }
 
     public void validateCreatorId(Long creatorId) {
