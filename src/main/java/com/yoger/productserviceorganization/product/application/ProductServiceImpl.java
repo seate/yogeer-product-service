@@ -74,29 +74,31 @@ public class ProductServiceImpl implements ProductService {
         product.validateUnexpectedState(ProductState.DEMO);
         product.validateCreatorId(creatorId);
 
-        if (updatedDemoProductRequestDTO.image() != null && !updatedDemoProductRequestDTO.image().isEmpty()) {
-            String newImageUrl = imageStorageService.uploadImage(updatedDemoProductRequestDTO.image());
-            imageStorageService.deleteImage(product.getImageUrl());
-            product.updateImageUrl(newImageUrl);
-        }
-
-        if (updatedDemoProductRequestDTO.thumbnailImage() != null && !updatedDemoProductRequestDTO.thumbnailImage()
-                .isEmpty()) {
-            String newThumbnailImageUrl = imageStorageService.uploadImage(
-                    updatedDemoProductRequestDTO.thumbnailImage());
-            imageStorageService.deleteImage(product.getThumbnailImageUrl());
-            product.updateThumbnailImageUrl(newThumbnailImageUrl);
-        }
-
+        String updatedProductName = product.getName();
         if (updatedDemoProductRequestDTO.name() != null) {
-            product.updateName(updatedDemoProductRequestDTO.name());
+            updatedProductName = updatedDemoProductRequestDTO.name();
         }
-
+        String updatedProductDescription = product.getDescription();
         if (updatedDemoProductRequestDTO.description() != null) {
-            product.updateDescription(updatedDemoProductRequestDTO.description());
+            updatedProductDescription = updatedDemoProductRequestDTO.description();
         }
+        String updatedImageUrl = imageStorageService.updateImage(
+                updatedDemoProductRequestDTO.image(),
+                product.getImageUrl()
+        );
+        String updatedThumbnailImageUrl = imageStorageService.updateImage(
+                updatedDemoProductRequestDTO.thumbnailImage(),
+                product.getThumbnailImageUrl()
+        );
+        Product updatedProduct = Product.updatedDemoProduct(
+                product,
+                updatedProductName,
+                updatedProductDescription,
+                updatedImageUrl,
+                updatedThumbnailImageUrl
+        );
 
-        Product savedProduct = productRepository.save(product);
+        Product savedProduct = productRepository.save(updatedProduct);
         return DemoProductResponseDTO.from(savedProduct);
     }
 
