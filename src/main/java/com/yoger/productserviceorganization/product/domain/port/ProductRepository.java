@@ -14,4 +14,6 @@ public interface ProductRepository {
     List<Product> findAll();
 
     void deleteById(Long productId);
+
+    Product findByIdWithLock(Long id);
 }
