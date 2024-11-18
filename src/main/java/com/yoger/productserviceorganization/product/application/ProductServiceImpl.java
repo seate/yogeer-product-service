@@ -115,7 +115,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     public void changeSellableProductStock(Long productId, Integer quantity) {
-        Product product = productRepository.findById(productId);
+        Product product = productRepository.findByIdWithLock(productId);
         product.changeStockQuantity(quantity);
         productRepository.save(product);
     }
