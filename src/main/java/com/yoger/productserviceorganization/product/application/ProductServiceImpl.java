@@ -1,6 +1,8 @@
 package com.yoger.productserviceorganization.product.application;
 
 import com.yoger.productserviceorganization.product.adapters.web.dto.request.UpdatedDemoProductRequestDTO;
+import com.yoger.productserviceorganization.product.domain.exception.InvalidProductException;
+import com.yoger.productserviceorganization.product.domain.exception.InvalidStockException;
 import com.yoger.productserviceorganization.product.domain.port.ProductRepository;
 import com.yoger.productserviceorganization.product.domain.model.Product;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;
@@ -70,7 +72,7 @@ public class ProductServiceImpl implements ProductService {
             Long creatorId,
             UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO
     ) {
-        Product product = productRepository.findById(productId);
+        Product product = productRepository.findByIdWithLock(productId);
         product.validateUnexpectedState(ProductState.DEMO);
         product.validateCreatorId(creatorId);
 
@@ -104,7 +106,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     public void deleteDemoProduct(Long productId, Long creatorId) {
-        Product product = productRepository.findById(productId);
+        Product product = productRepository.findByIdWithLock(productId);
         product.validateUnexpectedState(ProductState.DEMO);
         product.validateCreatorId(creatorId);
 
@@ -115,8 +117,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Transactional
     public void changeSellableProductStock(Long productId, Integer quantity) {
-        Product product = productRepository.findByIdWithLock(productId);
-        product.changeStockQuantity(quantity);
-        productRepository.save(product);
+        int flag = productRepository.updateStock(productId, quantity);
+        if(flag == 0) {
+            if(productRepository.existsById(productId)) {
+                throw new InvalidProductException("존재하지 않는 상품에 대한 재고 변경 요청입니다.");
+            }
+            throw new InvalidStockException("상품의 재고가 부족합니다.");
+        }
     }
 }
