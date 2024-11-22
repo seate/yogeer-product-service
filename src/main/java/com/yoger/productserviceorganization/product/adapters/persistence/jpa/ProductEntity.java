@@ -60,16 +60,16 @@ public class ProductEntity {
     )
     private String imageUrl;
 
-    @NotNull(message = "상품의 상태를 정해주세요.")
-    @Enumerated(EnumType.STRING)
-    private ProductState state;
-
     @NotBlank(message = "상품에 대한 대표 사진을 추가해주세요.")
     @Pattern(
             regexp = "^(https?)://[a-zA-Z0-9\\-]+\\.s3\\.[a-zA-Z0-9\\-]+\\.amazonaws\\.com/.*$",
             message = "유효한 S3 URL 형식이어야 합니다."
     )
     private String thumbnailImageUrl;
+
+    @NotNull(message = "상품의 상태를 정해주세요.")
+    @Enumerated(EnumType.STRING)
+    private ProductState state;
 
     @NotNull(message = "제작자의 ID를 추가해주세요.")
     private Long creatorId;
@@ -101,8 +101,8 @@ public class ProductEntity {
             List<PriceByQuantity> priceByQuantities,
             String description,
             String imageUrl,
-            ProductState state,
             String thumbnailImageUrl,
+            ProductState state,
             Long creatorId,
             String creatorName ,
             LocalDateTime dueDate,
@@ -115,8 +115,8 @@ public class ProductEntity {
                 priceByQuantities,
                 description,
                 imageUrl,
-                state,
                 thumbnailImageUrl,
+                state,
                 creatorId,
                 creatorName,
                 null,

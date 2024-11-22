@@ -48,4 +48,21 @@ public class ProductRepositoryImpl implements ProductRepository {
     public void deleteById(Long productId) {
         jpaProductRepository.deleteById(productId);
     }
+
+    @Override
+    public Product findByIdWithLock(Long productId) {
+        ProductEntity productEntity = jpaProductRepository.findByIdWithLock(productId)
+                .orElseThrow(() -> new ProductNotFoundException(productId));
+        return ProductMapper.toDomainFrom(productEntity);
+    }
+
+    @Override
+    public Integer updateStock(Long productId, Integer quantity) {
+        return jpaProductRepository.updateStock(productId, quantity);
+    }
+
+    @Override
+    public Boolean existsById(Long productId) {
+        return jpaProductRepository.existsById(productId);
+    }
 }

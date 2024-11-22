@@ -7,11 +7,11 @@ import lombok.Getter;
 
 //package-private 접근 제어로 패키지 밖에서는 이 StockDomain 클래스에 접근 불가
 @Getter(AccessLevel.PACKAGE)
-class StockDomain {
+class Stock {
     private final int initialStockQuantity;
     private int stockQuantity;
 
-    StockDomain(int initialStockQuantity, int stockQuantity) {
+    Stock(int initialStockQuantity, int stockQuantity) {
         if (initialStockQuantity < 0) {
             throw new InvalidStockException("초기 재고 수량은 0보다 작을 수 없습니다.");
         }
@@ -25,14 +25,14 @@ class StockDomain {
         this.stockQuantity = stockQuantity;
     }
 
-    void decrease(int amount) {
-        if (amount <= 0) {
-            throw new InvalidStockException("감소할 수량은 0보다 커야 합니다.");
+    void change(int amount) {
+        if (amount == 0) {
+            throw new InvalidStockException("재고 변경 수량은 0이 될 수 없습니다.");
         }
-        if (this.stockQuantity < amount) {
+        if (this.stockQuantity < (-1) * amount) {
             throw new InsufficientStockException("재고 수량이 부족합니다.");
         }
-        this.stockQuantity -= amount;
+        this.stockQuantity += amount;
     }
 
     void validateByState(ProductState state) {

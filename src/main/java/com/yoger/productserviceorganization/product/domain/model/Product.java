@@ -10,16 +10,16 @@ import lombok.Getter;
 @Getter
 public class Product {
     private final Long id;
-    private String name;
+    private final String name;
     private final List<PriceByQuantity> priceByQuantities;
-    private String description;
-    private String imageUrl;
+    private final String description;
+    private final String imageUrl;
+    private final String thumbnailImageUrl;
     private final ProductState state;
-    private String thumbnailImageUrl;
     private final Long creatorId;
     private final String creatorName;
     private final LocalDateTime dueDate;
-    private final StockDomain stockDomain;
+    private final Stock stock;
 
     private Product(
             Long id,
@@ -27,24 +27,24 @@ public class Product {
             List<PriceByQuantity> priceByQuantities,
             String description,
             String imageUrl,
-            ProductState state,
             String thumbnailImageUrl,
+            ProductState state,
             Long creatorId,
             String creatorName,
             LocalDateTime dueDate,
-            StockDomain stockDomain
+            Stock stock
     ) {
         this.id = id;
         this.name = name;
         this.priceByQuantities = priceByQuantities;
         this.description = description;
         this.imageUrl = imageUrl;
-        this.state = state;
         this.thumbnailImageUrl = thumbnailImageUrl;
+        this.state = state;
         this.creatorId = creatorId;
         this.creatorName = creatorName;
         this.dueDate = dueDate;
-        this.stockDomain = stockDomain;
+        this.stock = stock;
     }
 
     // 정적 팩토리 메서드
@@ -54,8 +54,8 @@ public class Product {
             List<PriceByQuantity> priceByQuantities,
             String description,
             String imageUrl,
-            ProductState state,
             String thumbnailImageUrl,
+            ProductState state,
             Long creatorId,
             String creatorName,
             LocalDateTime dueDate,
@@ -63,20 +63,42 @@ public class Product {
             int stockQuantity
     ) {
         validateFieldsByState(state, priceByQuantities, dueDate);
-        StockDomain stockDomain = new StockDomain(initialStockQuantity, stockQuantity);
-        stockDomain.validateByState(state);
+        Stock stock = new Stock(initialStockQuantity, stockQuantity);
+        stock.validateByState(state);
         return new Product(
                 id,
                 name,
                 priceByQuantities,
                 description,
                 imageUrl,
-                state,
                 thumbnailImageUrl,
+                state,
                 creatorId,
                 creatorName,
                 dueDate,
-                stockDomain
+                stock
+        );
+    }
+
+    public static Product updatedDemoProduct(
+            Product existingProduct,
+            String updatedName,
+            String updatedDescription,
+            String updatedImageUrl,
+            String updatedThumbnailImageUrl
+    ) {
+        return new Product(
+                existingProduct.getId(),
+                updatedName,
+                existingProduct.getPriceByQuantities(),
+                updatedDescription,
+                updatedImageUrl,
+                updatedThumbnailImageUrl,
+                existingProduct.getState(),
+                existingProduct.getCreatorId(),
+                existingProduct.getCreatorName(),
+                existingProduct.getDueDate(),
+                existingProduct.getStock()
         );
     }
 
@@ -115,16 +137,17 @@ public class Product {
         }
     }
 
-    public void decreaseStockQuantity(int amount) {
-        this.stockDomain.decrease(amount);
+    public void changeStockQuantity(Integer amount) {
+        validateUnexpectedState(ProductState.SELLABLE);
+        this.stock.change(amount);
     }
 
     public int getStockQuantity() {
-        return stockDomain.getStockQuantity();
+        return stock.getStockQuantity();
     }
 
     public int getInitialStockQuantity() {
-        return stockDomain.getInitialStockQuantity();
+        return stock.getInitialStockQuantity();
     }
 
     public void validateUnexpectedState(ProductState expectedState) {
@@ -135,22 +158,6 @@ public class Product {
 
     private boolean isUnexpectedState(ProductState expectedState) {
         return !this.state.equals(expectedState);
-    }
-
-    public void updateName(String newName) {
-        this.name = newName;
-    }
-
-    public void updateDescription(String newDescription) {
-        this.description = newDescription;
-    }
-
-    public void updateImageUrl(String newImageUrl) {
-        this.imageUrl = newImageUrl;
-    }
-
-    public void updateThumbnailImageUrl(String newThumbnailImageUrl) {
-        this.thumbnailImageUrl = newThumbnailImageUrl;
     }
 
     public void validateCreatorId(Long creatorId) {

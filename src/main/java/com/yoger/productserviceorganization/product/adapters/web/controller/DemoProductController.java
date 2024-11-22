@@ -49,7 +49,7 @@ public class DemoProductController {
     @PatchMapping("/{productId}")
     public ResponseEntity<DemoProductResponseDTO> updateDemoProduct(
             @PathVariable Long productId,
-            @RequestHeader(value = "user_id") Long creatorId,
+            @RequestHeader(value = "user-id") Long creatorId,
             @Valid @ModelAttribute UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO
     ) {
         DemoProductResponseDTO updatedProduct =
@@ -60,7 +60,7 @@ public class DemoProductController {
     @DeleteMapping("/{productId}")
     public ResponseEntity<String> deleteDemoProduct(
             @PathVariable Long productId,
-            @RequestHeader(value = "user_id") Long creatorId
+            @RequestHeader(value = "user-id") Long creatorId
     ) {
         productService.deleteDemoProduct(productId, creatorId);
         return ResponseEntity.noContent().build();

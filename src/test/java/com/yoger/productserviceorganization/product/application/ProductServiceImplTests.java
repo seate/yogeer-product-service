@@ -45,8 +45,8 @@ public class ProductServiceImplTests {
                 priceByQuantities,
                 "상품에 대한 설명입니다.",
                 "https://my-bucket.s3.us-west-1.amazonaws.com/myimage.jpg",
-                ProductState.SELLABLE,
                 "https://my-bucket.s3.us-west-1.amazonaws.com/my-thumbnail.jpg",
+                ProductState.SELLABLE,
                 1L, // creatorId
                 "제작자 이름", // creatorName
                 LocalDateTime.now().plusDays(30), // dueDate

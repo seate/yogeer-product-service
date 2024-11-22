@@ -14,4 +14,10 @@ public interface ProductRepository {
     List<Product> findAll();
 
     void deleteById(Long productId);
+
+    Product findByIdWithLock(Long id);
+
+    Integer updateStock(Long productId, Integer quantity);
+
+    Boolean existsById(Long productId);
 }

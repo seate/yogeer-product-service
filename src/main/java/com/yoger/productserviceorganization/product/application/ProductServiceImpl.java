@@ -1,6 +1,8 @@
 package com.yoger.productserviceorganization.product.application;
 
 import com.yoger.productserviceorganization.product.adapters.web.dto.request.UpdatedDemoProductRequestDTO;
+import com.yoger.productserviceorganization.product.domain.exception.InvalidProductException;
+import com.yoger.productserviceorganization.product.domain.exception.InvalidStockException;
 import com.yoger.productserviceorganization.product.domain.port.ProductRepository;
 import com.yoger.productserviceorganization.product.domain.model.Product;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;
@@ -70,44 +72,57 @@ public class ProductServiceImpl implements ProductService {
             Long creatorId,
             UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO
     ) {
-        Product product = productRepository.findById(productId);
+        Product product = productRepository.findByIdWithLock(productId);
         product.validateUnexpectedState(ProductState.DEMO);
         product.validateCreatorId(creatorId);
 
-        if (updatedDemoProductRequestDTO.image() != null && !updatedDemoProductRequestDTO.image().isEmpty()) {
-            String newImageUrl = imageStorageService.uploadImage(updatedDemoProductRequestDTO.image());
-            imageStorageService.deleteImage(product.getImageUrl());
-            product.updateImageUrl(newImageUrl);
-        }
-
-        if (updatedDemoProductRequestDTO.thumbnailImage() != null && !updatedDemoProductRequestDTO.thumbnailImage()
-                .isEmpty()) {
-            String newThumbnailImageUrl = imageStorageService.uploadImage(
-                    updatedDemoProductRequestDTO.thumbnailImage());
-            imageStorageService.deleteImage(product.getThumbnailImageUrl());
-            product.updateThumbnailImageUrl(newThumbnailImageUrl);
-        }
-
+        String updatedProductName = product.getName();
         if (updatedDemoProductRequestDTO.name() != null) {
-            product.updateName(updatedDemoProductRequestDTO.name());
+            updatedProductName = updatedDemoProductRequestDTO.name();
         }
-
+        String updatedProductDescription = product.getDescription();
         if (updatedDemoProductRequestDTO.description() != null) {
-            product.updateDescription(updatedDemoProductRequestDTO.description());
+            updatedProductDescription = updatedDemoProductRequestDTO.description();
         }
+        String updatedImageUrl = imageStorageService.updateImage(
+                updatedDemoProductRequestDTO.image(),
+                product.getImageUrl()
+        );
+        String updatedThumbnailImageUrl = imageStorageService.updateImage(
+                updatedDemoProductRequestDTO.thumbnailImage(),
+                product.getThumbnailImageUrl()
+        );
+        Product updatedProduct = Product.updatedDemoProduct(
+                product,
+                updatedProductName,
+                updatedProductDescription,
+                updatedImageUrl,
+                updatedThumbnailImageUrl
+        );
 
-        Product savedProduct = productRepository.save(product);
+        Product savedProduct = productRepository.save(updatedProduct);
         return DemoProductResponseDTO.from(savedProduct);
     }
 
     @Transactional
     public void deleteDemoProduct(Long productId, Long creatorId) {
-        Product product = productRepository.findById(productId);
+        Product product = productRepository.findByIdWithLock(productId);
         product.validateUnexpectedState(ProductState.DEMO);
         product.validateCreatorId(creatorId);
 
         imageStorageService.deleteImage(product.getImageUrl());
         imageStorageService.deleteImage(product.getThumbnailImageUrl());
         productRepository.deleteById(productId);
+    }
+
+    @Transactional
+    public void changeSellableProductStock(Long productId, Integer quantity) {
+        int flag = productRepository.updateStock(productId, quantity);
+        if(flag == 0) {
+            if(productRepository.existsById(productId)) {
+                throw new InvalidProductException("존재하지 않는 상품에 대한 재고 변경 요청입니다.");
+            }
+            throw new InvalidStockException("상품의 재고가 부족합니다.");
+        }
     }
 }
