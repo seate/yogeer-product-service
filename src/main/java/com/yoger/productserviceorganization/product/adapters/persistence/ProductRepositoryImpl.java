@@ -55,4 +55,14 @@ public class ProductRepositoryImpl implements ProductRepository {
                 .orElseThrow(() -> new ProductNotFoundException(productId));
         return ProductMapper.toDomainFrom(productEntity);
     }
+
+    @Override
+    public int updateStock(Long productId, Integer quantity) {
+        return jpaProductRepository.updateStock(productId, quantity);
+    }
+
+    @Override
+    public boolean existsById(Long productId) {
+        return jpaProductRepository.existsById(productId);
+    }
 }
