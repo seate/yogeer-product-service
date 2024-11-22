@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface JpaProductRepository extends JpaRepository<ProductEntity, Long> {
     List<ProductEntity> findByState(ProductState state);
@@ -14,4 +16,9 @@ public interface JpaProductRepository extends JpaRepository<ProductEntity, Long>
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT p FROM ProductEntity p WHERE p.id = :id")
     Optional<ProductEntity> findByIdWithLock(Long id);
+
+    @Modifying
+    @Query("UPDATE ProductEntity p SET p.stockQuantity = p.stockQuantity + :quantity " +
+            "WHERE p.id = :id AND p.stockQuantity + :quantity >= 0")
+    int updateStock(@Param("id") Long id, @Param("quantity") Integer quantity);
 }
