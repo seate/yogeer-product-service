@@ -16,4 +16,8 @@ public interface ProductRepository {
     void deleteById(Long productId);
 
     Product findByIdWithLock(Long id);
+
+    int updateStock(Long productId, Integer quantity);
+
+    boolean existsById(Long productId);
 }
