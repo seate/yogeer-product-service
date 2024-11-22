@@ -17,7 +17,7 @@ public interface ProductRepository {
 
     Product findByIdWithLock(Long id);
 
-    int updateStock(Long productId, Integer quantity);
+    Integer updateStock(Long productId, Integer quantity);
 
-    boolean existsById(Long productId);
+    Boolean existsById(Long productId);
 }

@@ -57,12 +57,12 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public int updateStock(Long productId, Integer quantity) {
+    public Integer updateStock(Long productId, Integer quantity) {
         return jpaProductRepository.updateStock(productId, quantity);
     }
 
     @Override
-    public boolean existsById(Long productId) {
+    public Boolean existsById(Long productId) {
         return jpaProductRepository.existsById(productId);
     }
 }
