@@ -18,6 +18,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Service
 @RequiredArgsConstructor
@@ -40,8 +42,28 @@ public class ProductServiceImpl implements ProductService {
     public DemoProductResponseDTO saveDemoProduct(@Valid DemoProductRequestDTO demoProductRequestDTO) {
         String imageUrl = imageStorageService.uploadImage(demoProductRequestDTO.image());
         String thumbnailImageUrl = imageStorageService.uploadImage(demoProductRequestDTO.thumbnailImage());
+
+        registerTransactionSynchronizationForImageDeletion(imageUrl, thumbnailImageUrl);
+
         Product product = ProductMapper.toDomainFrom(demoProductRequestDTO, imageUrl, thumbnailImageUrl);
         return DemoProductResponseDTO.from(productRepository.save(product));
+    }
+
+    private void registerTransactionSynchronizationForImageDeletion(String imageUrl, String thumbnailImageUrl) {
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCompletion(int status) {
+                if (status == TransactionSynchronization.STATUS_ROLLED_BACK) {
+                    deleteUploadedImages(imageUrl, thumbnailImageUrl);
+                }
+            }
+        });
+    }
+
+    private void deleteUploadedImages(String... imageUrls) {
+        for (String imageUrl : imageUrls) {
+            imageStorageService.deleteImage(imageUrl);
+        }
     }
 
     public List<SimpleDemoProductResponseDTO> findSimpleDemoProducts() {

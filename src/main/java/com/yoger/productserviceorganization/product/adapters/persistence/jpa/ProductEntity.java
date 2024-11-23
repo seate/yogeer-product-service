@@ -55,14 +55,14 @@ public class ProductEntity {
 
     @NotBlank(message = "상품에 대한 사진을 추가해주세요.")
     @Pattern(
-            regexp = "^(https?)://[a-zA-Z0-9\\-]+\\.s3\\.[a-zA-Z0-9\\-]+\\.amazonaws\\.com/.*$",
+            regexp = "^(https?)://storage\\.googleapis\\.com/[a-zA-Z0-9\\-]+/.*$",
             message = "유효한 S3 URL 형식이어야 합니다."
     )
     private String imageUrl;
 
     @NotBlank(message = "상품에 대한 대표 사진을 추가해주세요.")
     @Pattern(
-            regexp = "^(https?)://[a-zA-Z0-9\\-]+\\.s3\\.[a-zA-Z0-9\\-]+\\.amazonaws\\.com/.*$",
+            regexp = "^(https?)://storage\\.googleapis\\.com/[a-zA-Z0-9\\-]+/.*$",
             message = "유효한 S3 URL 형식이어야 합니다."
     )
     private String thumbnailImageUrl;
