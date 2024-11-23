@@ -19,6 +19,10 @@ configurations {
     }
 }
 
+bootBuildImage {
+    imageName = 'haekwang/yoger-product-service-v3:latest'
+}
+
 repositories {
     mavenCentral()
 }
@@ -34,6 +38,8 @@ dependencies {
     // S3 client
     implementation 'software.amazon.awssdk:s3'
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
+
+    implementation 'com.google.cloud:google-cloud-storage:2.44.1'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
