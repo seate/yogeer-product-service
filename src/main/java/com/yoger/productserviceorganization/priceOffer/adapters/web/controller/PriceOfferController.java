@@ -1,5 +1,6 @@
 package com.yoger.productserviceorganization.priceOffer.adapters.web.controller;
 
+import com.yoger.productserviceorganization.priceOffer.adapters.web.dto.request.ConfirmOfferRequestDTO;
 import com.yoger.productserviceorganization.priceOffer.adapters.web.dto.request.PriceOfferRequestDTO;
 import com.yoger.productserviceorganization.priceOffer.adapters.web.dto.response.PriceOffersResponseDTO;
 import com.yoger.productserviceorganization.priceOffer.application.PriceOfferService;
@@ -41,6 +42,14 @@ public class PriceOfferController {
                                        @RequestHeader("user-id") Long companyId,
                                        @RequestBody @Valid PriceOfferRequestDTO priceOfferRequestDTO) {
         priceOfferService.update(productId, companyId, priceOfferRequestDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/{productId}/confirm")
+    public ResponseEntity<Void> confirm(@PathVariable Long productId,
+                                        @RequestHeader("user-id") Long userId,
+                                        @RequestBody @Valid ConfirmOfferRequestDTO confirmOfferRequestDTO) {
+        priceOfferService.confirm(productId, userId, confirmOfferRequestDTO);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

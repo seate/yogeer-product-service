@@ -8,6 +8,7 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import com.yoger.productserviceorganization.priceOffer.adapters.web.dto.request.ConfirmOfferRequestDTO;
 import com.yoger.productserviceorganization.priceOffer.adapters.web.dto.request.PriceOfferRequestDTO;
 import com.yoger.productserviceorganization.priceOffer.domain.exception.PriceOfferAlreadyExistException;
 import com.yoger.productserviceorganization.priceOffer.domain.exception.PriceOfferNotAllowedCreateOrUpdateException;
@@ -37,6 +38,7 @@ class PriceOfferServiceImplTest {
     private ProductService productService;
 
 
+    Long userId = 1L;
     Long productId = 1L;
     Long companyId = 2L;
     List<PriceByQuantity> priceByQuantities = List.of(new PriceByQuantity(1, 1000));
@@ -78,6 +80,16 @@ class PriceOfferServiceImplTest {
 
         assertThatThrownBy(() -> priceOfferService.update(productId, companyId, priceOfferRequestDTO))
                 .isInstanceOf(PriceOfferNotAllowedCreateOrUpdateException.class);
+    }
+
+    @Test
+    void confirm() {
+        ConfirmOfferRequestDTO confirmOfferRequestDTO = new ConfirmOfferRequestDTO(companyId);
+        PriceOffer priceOffer = PriceOffer.createTemporary(productId, companyId, priceByQuantities);
+        given(priceOfferRepository.findById(productId, companyId)).willReturn(Optional.of(priceOffer));
+        priceOfferService.confirm(productId, userId, confirmOfferRequestDTO);
+
+        verify(priceOfferRepository, times(1)).save(any(PriceOffer.class));
     }
 
     @Test

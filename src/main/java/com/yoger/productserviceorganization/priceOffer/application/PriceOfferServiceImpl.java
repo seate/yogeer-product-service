@@ -1,9 +1,11 @@
 package com.yoger.productserviceorganization.priceOffer.application;
 
+import com.yoger.productserviceorganization.priceOffer.adapters.web.dto.request.ConfirmOfferRequestDTO;
 import com.yoger.productserviceorganization.priceOffer.adapters.web.dto.request.PriceOfferRequestDTO;
 import com.yoger.productserviceorganization.priceOffer.adapters.web.dto.response.PriceOffersResponseDTO;
 import com.yoger.productserviceorganization.priceOffer.domain.exception.PriceOfferAlreadyExistException;
 import com.yoger.productserviceorganization.priceOffer.domain.exception.PriceOfferNotAllowedCreateOrUpdateException;
+import com.yoger.productserviceorganization.priceOffer.domain.exception.PriceOfferNotFoundException;
 import com.yoger.productserviceorganization.priceOffer.domain.model.PriceOffer;
 import com.yoger.productserviceorganization.priceOffer.domain.port.PriceOfferRepository;
 import com.yoger.productserviceorganization.priceOffer.mapper.PriceOfferMapper;
@@ -42,6 +44,21 @@ public class PriceOfferServiceImpl implements PriceOfferService {
 
         PriceOffer priceOffer = PriceOfferMapper.createTemporary(productId, companyId, priceOfferRequestDTO.priceByQuantities());
         priceOfferRepository.save(priceOffer);
+    }
+
+    @Override
+    public void confirm(Long productId, Long creatorId, ConfirmOfferRequestDTO confirmOfferRequestDTO) {
+        PriceOffer priceOffer = findById(productId, confirmOfferRequestDTO.companyId());
+        priceOffer.confirm();
+
+        productService.updateDemoToSellable(productId, creatorId, priceOffer.getPriceByQuantities());
+
+        priceOfferRepository.save(priceOffer);
+    }
+
+    private PriceOffer findById(Long productId, Long companyId) {
+        return priceOfferRepository.findById(productId, companyId)
+                .orElseThrow(() -> new PriceOfferNotFoundException("가격 제안 정보가 존재하지 않습니다."));
     }
 
     @Override
