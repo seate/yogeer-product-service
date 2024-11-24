@@ -137,6 +137,24 @@ public class Product {
         }
     }
 
+    public static Product toSellableFrom(Product product, List<PriceByQuantity> priceByQuantities, LocalDateTime dueDate) {
+        product.validateUnexpectedState(ProductState.DEMO);
+        return new Product(
+                product.getId(),
+                product.getName(),
+                priceByQuantities,
+                product.getDescription(),
+                product.getImageUrl(),
+                product.getThumbnailImageUrl(),
+                ProductState.SELLABLE,
+                product.getCreatorId(),
+                product.getCreatorName(),
+                dueDate,
+                product.getStock()
+        );
+    }
+
+
     public void changeStockQuantity(Integer amount) {
         validateUnexpectedState(ProductState.SELLABLE);
         this.stock.change(amount);
