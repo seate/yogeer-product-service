@@ -1,10 +1,9 @@
 package com.yoger.productserviceorganization.priceOffer.application;
 
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -15,12 +14,15 @@ import com.yoger.productserviceorganization.priceOffer.domain.exception.PriceOff
 import com.yoger.productserviceorganization.priceOffer.domain.model.PriceOffer;
 import com.yoger.productserviceorganization.priceOffer.domain.model.PriceOfferState;
 import com.yoger.productserviceorganization.priceOffer.domain.port.PriceOfferRepository;
+import com.yoger.productserviceorganization.priceOffer.mapper.PriceOfferMapper;
 import com.yoger.productserviceorganization.product.application.ProductService;
 import com.yoger.productserviceorganization.product.domain.model.PriceByQuantity;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -37,6 +39,9 @@ class PriceOfferServiceImplTest {
     @Mock
     private ProductService productService;
 
+    @Captor
+    private ArgumentCaptor<PriceOffer> priceOfferCaptor = ArgumentCaptor.forClass(PriceOffer.class);
+
 
     Long userId = 1L;
     Long productId = 1L;
@@ -48,11 +53,13 @@ class PriceOfferServiceImplTest {
     @Test
     void create_success() {
         given(priceOfferRepository.findById(productId, companyId)).willReturn(Optional.empty());
-        willDoNothing().given(priceOfferRepository).save(any(PriceOffer.class));
 
         priceOfferService.create(productId, companyId, priceOfferRequestDTO);
 
-        verify(priceOfferRepository, times(1)).save(any(PriceOffer.class));
+        verify(priceOfferRepository, times(1)).save(priceOfferCaptor.capture());
+        PriceOffer captured = priceOfferCaptor.getValue();
+        PriceOffer expected = PriceOfferMapper.createTemporary(productId, companyId, priceByQuantities);
+        assertThat(captured).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test
@@ -71,7 +78,10 @@ class PriceOfferServiceImplTest {
 
         priceOfferService.update(productId, companyId, priceOfferRequestDTO);
 
-        verify(priceOfferRepository, times(1)).save(any(PriceOffer.class));
+        verify(priceOfferRepository, times(1)).save(priceOfferCaptor.capture());
+        PriceOffer captured = priceOfferCaptor.getValue();
+        PriceOffer expected = PriceOfferMapper.createTemporary(productId, companyId, priceByQuantities);
+        assertThat(captured).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test
@@ -89,7 +99,10 @@ class PriceOfferServiceImplTest {
         given(priceOfferRepository.findById(productId, companyId)).willReturn(Optional.of(priceOffer));
         priceOfferService.confirm(productId, userId, confirmOfferRequestDTO);
 
-        verify(priceOfferRepository, times(1)).save(any(PriceOffer.class));
+        verify(priceOfferRepository, times(1)).save(priceOfferCaptor.capture());
+        PriceOffer captured = priceOfferCaptor.getValue();
+        PriceOffer expected = PriceOffer.of(productId, companyId, priceByQuantities, PriceOfferState.CONFIRMED);
+        assertThat(captured).usingRecursiveComparison().isEqualTo(expected);
     }
 
     @Test
