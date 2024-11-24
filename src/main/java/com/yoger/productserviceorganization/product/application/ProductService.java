@@ -19,6 +19,8 @@ public interface ProductService {
 
     SellableProductResponseDTO findSellableProduct(Long productId);
 
+    Boolean isDemoProduct(Long productId);
+
     DemoProductResponseDTO findDemoProduct(Long productId);
 
     DemoProductResponseDTO updateDemoProduct(Long productId, Long creatorId, UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO);

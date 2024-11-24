@@ -84,6 +84,10 @@ public class ProductServiceImpl implements ProductService {
         return SellableProductResponseDTO.from(product);
     }
 
+    public Boolean isDemoProduct(Long productId) {
+        return productRepository.findById(productId).isDemo();
+    }
+
     public DemoProductResponseDTO findDemoProduct(Long productId) {
         Product product = productRepository.findById(productId);
         product.validateUnexpectedState(ProductState.DEMO);
