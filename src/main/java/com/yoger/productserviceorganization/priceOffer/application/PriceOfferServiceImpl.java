@@ -1,6 +1,7 @@
 package com.yoger.productserviceorganization.priceOffer.application;
 
 import com.yoger.productserviceorganization.priceOffer.adapters.web.dto.request.PriceOfferRequestDTO;
+import com.yoger.productserviceorganization.priceOffer.adapters.web.dto.response.PriceOffersResponseDTO;
 import com.yoger.productserviceorganization.priceOffer.domain.exception.PriceOfferAlreadyExistException;
 import com.yoger.productserviceorganization.priceOffer.domain.model.PriceOffer;
 import com.yoger.productserviceorganization.priceOffer.domain.port.PriceOfferRepository;
@@ -25,5 +26,10 @@ public class PriceOfferServiceImpl implements PriceOfferService {
 
     private Boolean isExist(Long productId, Long companyId) {
         return priceOfferRepository.findById(productId, companyId).isPresent();
+    }
+
+    @Override
+    public PriceOffersResponseDTO getAllByProductId(Long productId) {
+        return PriceOffersResponseDTO.from(priceOfferRepository.findAllByProductId(productId));
     }
 }
