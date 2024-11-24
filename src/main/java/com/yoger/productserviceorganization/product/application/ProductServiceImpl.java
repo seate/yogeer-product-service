@@ -1,19 +1,21 @@
 package com.yoger.productserviceorganization.product.application;
 
-import com.yoger.productserviceorganization.product.adapters.web.dto.request.UpdatedDemoProductRequestDTO;
-import com.yoger.productserviceorganization.product.domain.exception.InvalidProductException;
-import com.yoger.productserviceorganization.product.domain.exception.InvalidStockException;
-import com.yoger.productserviceorganization.product.domain.port.ProductRepository;
-import com.yoger.productserviceorganization.product.domain.model.Product;
-import com.yoger.productserviceorganization.product.domain.model.ProductState;
-import com.yoger.productserviceorganization.product.domain.port.ImageStorageService;
 import com.yoger.productserviceorganization.product.adapters.web.dto.request.DemoProductRequestDTO;
+import com.yoger.productserviceorganization.product.adapters.web.dto.request.UpdatedDemoProductRequestDTO;
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.DemoProductResponseDTO;
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.SellableProductResponseDTO;
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.SimpleDemoProductResponseDTO;
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.SimpleSellableProductResponseDTO;
+import com.yoger.productserviceorganization.product.domain.exception.InvalidProductException;
+import com.yoger.productserviceorganization.product.domain.exception.InvalidStockException;
+import com.yoger.productserviceorganization.product.domain.model.PriceByQuantity;
+import com.yoger.productserviceorganization.product.domain.model.Product;
+import com.yoger.productserviceorganization.product.domain.model.ProductState;
+import com.yoger.productserviceorganization.product.domain.port.ImageStorageService;
+import com.yoger.productserviceorganization.product.domain.port.ProductRepository;
 import com.yoger.productserviceorganization.product.mapper.ProductMapper;
 import jakarta.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -125,6 +127,16 @@ public class ProductServiceImpl implements ProductService {
         Product savedProduct = productRepository.save(updatedProduct);
         return DemoProductResponseDTO.from(savedProduct);
     }
+
+    @Transactional
+    public void updateDemoToSellable(Long productId, Long creatorId, List<PriceByQuantity> priceByQuantities) {
+        Product demoProduct = productRepository.findById(productId);
+        demoProduct.validateCreatorId(creatorId);
+
+        Product sellableProduct = Product.toSellableFrom(demoProduct, priceByQuantities, LocalDate.MAX.atStartOfDay());
+        productRepository.save(sellableProduct);
+    }
+
 
     @Transactional
     public void deleteDemoProduct(Long productId, Long creatorId) {

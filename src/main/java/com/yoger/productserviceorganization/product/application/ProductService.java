@@ -6,6 +6,7 @@ import com.yoger.productserviceorganization.product.adapters.web.dto.response.De
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.SellableProductResponseDTO;
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.SimpleDemoProductResponseDTO;
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.SimpleSellableProductResponseDTO;
+import com.yoger.productserviceorganization.product.domain.model.PriceByQuantity;
 import jakarta.validation.Valid;
 import java.util.List;
 
@@ -21,6 +22,8 @@ public interface ProductService {
     DemoProductResponseDTO findDemoProduct(Long productId);
 
     DemoProductResponseDTO updateDemoProduct(Long productId, Long creatorId, UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO);
+
+    void updateDemoToSellable(Long productId, Long creatorId, List<PriceByQuantity> priceByQuantities);
 
     void deleteDemoProduct(Long productId, Long creatorId);
 
