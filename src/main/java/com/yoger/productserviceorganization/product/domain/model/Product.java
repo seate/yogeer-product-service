@@ -187,4 +187,8 @@ public class Product {
     private boolean isInvalidCreatorId(Long creatorId) {
         return !this.creatorId.equals(creatorId);
     }
+
+    public Boolean isDemo() {
+        return this.state == ProductState.DEMO;
+    }
 }
