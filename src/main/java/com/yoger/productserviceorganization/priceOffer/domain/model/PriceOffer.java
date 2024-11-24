@@ -29,6 +29,15 @@ public final class PriceOffer {
         );
     }
 
+    public static PriceOffer createTemporary(Long productId, Long companyId, List<PriceByQuantity> priceByQuantities) {
+        return new PriceOffer(
+                productId,
+                companyId,
+                priceByQuantities,
+                PriceOfferState.TEMPORARY
+        );
+    }
+
     public void confirm() {
         if (state != PriceOfferState.TEMPORARY) {
             throw new PriceOfferNotUpdatableException("제안을 확정할 수 없는 상태입니다.");
