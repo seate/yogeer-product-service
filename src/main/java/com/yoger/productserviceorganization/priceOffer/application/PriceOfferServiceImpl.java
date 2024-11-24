@@ -37,6 +37,14 @@ public class PriceOfferServiceImpl implements PriceOfferService {
     }
 
     @Override
+    public void update(Long productId, Long companyId, PriceOfferRequestDTO priceOfferRequestDTO) {
+        validateUpdatable(productId);
+
+        PriceOffer priceOffer = PriceOfferMapper.createTemporary(productId, companyId, priceOfferRequestDTO.priceByQuantities());
+        priceOfferRepository.save(priceOffer);
+    }
+
+    @Override
     public void delete(Long productId, Long companyId) {
         validateUpdatable(productId);
         priceOfferRepository.delete(productId, companyId);

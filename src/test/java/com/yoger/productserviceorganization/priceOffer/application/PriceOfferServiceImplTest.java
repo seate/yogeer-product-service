@@ -64,6 +64,23 @@ class PriceOfferServiceImplTest {
     }
 
     @Test
+    void update_success() {
+        given(productService.isDemoProduct(productId)).willReturn(true);
+
+        priceOfferService.update(productId, companyId, priceOfferRequestDTO);
+
+        verify(priceOfferRepository, times(1)).save(any(PriceOffer.class));
+    }
+
+    @Test
+    void update_fail() {
+        given(productService.isDemoProduct(productId)).willReturn(false);
+
+        assertThatThrownBy(() -> priceOfferService.update(productId, companyId, priceOfferRequestDTO))
+                .isInstanceOf(PriceOfferNotAllowedCreateOrUpdateException.class);
+    }
+
+    @Test
     void delete_success() {
         given(productService.isDemoProduct(productId)).willReturn(true);
 

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +34,14 @@ public class PriceOfferController {
     @GetMapping("/{productId}")
     public ResponseEntity<PriceOffersResponseDTO> getPriceOffersByProductId(@PathVariable Long productId) {
         return new ResponseEntity<>(priceOfferService.getAllByProductId(productId), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{productId}")
+    public ResponseEntity<Void> update(@PathVariable Long productId,
+                                       @RequestHeader("user-id") Long companyId,
+                                       @RequestBody @Valid PriceOfferRequestDTO priceOfferRequestDTO) {
+        priceOfferService.update(productId, companyId, priceOfferRequestDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{productId}")

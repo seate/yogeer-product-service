@@ -9,5 +9,7 @@ public interface PriceOfferService {
 
     PriceOffersResponseDTO getAllByProductId(Long productId);
 
+    void update(Long productId, Long companyId, PriceOfferRequestDTO priceOfferRequestDTO);
+
     void delete(Long productId, Long companyId);
 }
