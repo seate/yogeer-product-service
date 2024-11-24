@@ -8,4 +8,6 @@ public interface PriceOfferService {
     void create(Long productId, Long companyId, PriceOfferRequestDTO priceOfferRequestDTO);
 
     PriceOffersResponseDTO getAllByProductId(Long productId);
+
+    void delete(Long productId, Long companyId);
 }

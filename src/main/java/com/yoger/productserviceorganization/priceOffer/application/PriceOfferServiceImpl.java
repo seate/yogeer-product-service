@@ -3,9 +3,11 @@ package com.yoger.productserviceorganization.priceOffer.application;
 import com.yoger.productserviceorganization.priceOffer.adapters.web.dto.request.PriceOfferRequestDTO;
 import com.yoger.productserviceorganization.priceOffer.adapters.web.dto.response.PriceOffersResponseDTO;
 import com.yoger.productserviceorganization.priceOffer.domain.exception.PriceOfferAlreadyExistException;
+import com.yoger.productserviceorganization.priceOffer.domain.exception.PriceOfferNotAllowedCreateOrUpdateException;
 import com.yoger.productserviceorganization.priceOffer.domain.model.PriceOffer;
 import com.yoger.productserviceorganization.priceOffer.domain.port.PriceOfferRepository;
 import com.yoger.productserviceorganization.priceOffer.mapper.PriceOfferMapper;
+import com.yoger.productserviceorganization.product.application.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PriceOfferServiceImpl implements PriceOfferService {
     private final PriceOfferRepository priceOfferRepository;
+    private final ProductService productService;
 
     @Override
     public void create(Long productId, Long companyId, PriceOfferRequestDTO priceOfferRequestDTO) {
@@ -31,5 +34,17 @@ public class PriceOfferServiceImpl implements PriceOfferService {
     @Override
     public PriceOffersResponseDTO getAllByProductId(Long productId) {
         return PriceOffersResponseDTO.from(priceOfferRepository.findAllByProductId(productId));
+    }
+
+    @Override
+    public void delete(Long productId, Long companyId) {
+        validateUpdatable(productId);
+        priceOfferRepository.delete(productId, companyId);
+    }
+
+    private void validateUpdatable(Long productId) {
+        if (!productService.isDemoProduct(productId)) {
+            throw new PriceOfferNotAllowedCreateOrUpdateException("업데이트할 수 있는 상품이 아닙니다.");
+        }
     }
 }

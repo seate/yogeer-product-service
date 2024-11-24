@@ -37,4 +37,9 @@ public class PriceOfferRepositoryImpl implements PriceOfferRepository {
                 .toList();
     }
 
+    @Override
+    @Transactional
+    public void delete(Long productId, Long companyId) {
+        jpaPriceOfferRepository.deleteById(new PriceOfferId(productId, companyId));
+    }
 }

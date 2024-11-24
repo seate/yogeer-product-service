@@ -10,4 +10,6 @@ public interface PriceOfferRepository {
     Optional<PriceOffer> findById(Long productId, Long companyId);
 
     List<PriceOffer> findAllByProductId(Long productId);
+
+    void delete(Long productId, Long companyId);
 }

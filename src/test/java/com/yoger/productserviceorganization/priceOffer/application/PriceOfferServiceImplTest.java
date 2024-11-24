@@ -10,9 +10,11 @@ import static org.mockito.Mockito.verify;
 
 import com.yoger.productserviceorganization.priceOffer.adapters.web.dto.request.PriceOfferRequestDTO;
 import com.yoger.productserviceorganization.priceOffer.domain.exception.PriceOfferAlreadyExistException;
+import com.yoger.productserviceorganization.priceOffer.domain.exception.PriceOfferNotAllowedCreateOrUpdateException;
 import com.yoger.productserviceorganization.priceOffer.domain.model.PriceOffer;
 import com.yoger.productserviceorganization.priceOffer.domain.model.PriceOfferState;
 import com.yoger.productserviceorganization.priceOffer.domain.port.PriceOfferRepository;
+import com.yoger.productserviceorganization.product.application.ProductService;
 import com.yoger.productserviceorganization.product.domain.model.PriceByQuantity;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +32,9 @@ class PriceOfferServiceImplTest {
 
     @Mock
     private PriceOfferRepository priceOfferRepository;
+
+    @Mock
+    private ProductService productService;
 
 
     Long productId = 1L;
@@ -58,5 +63,20 @@ class PriceOfferServiceImplTest {
                 .isInstanceOf(PriceOfferAlreadyExistException.class);
     }
 
+    @Test
+    void delete_success() {
+        given(productService.isDemoProduct(productId)).willReturn(true);
 
+        priceOfferService.delete(productId, companyId);
+
+        verify(priceOfferRepository, times(1)).delete(productId, companyId);
+    }
+
+    @Test
+    void delete_failure() {
+        given(productService.isDemoProduct(productId)).willReturn(false);
+
+        assertThatThrownBy(() -> priceOfferService.delete(productId, companyId))
+                .isInstanceOf(PriceOfferNotAllowedCreateOrUpdateException.class);
+    }
 }
