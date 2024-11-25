@@ -3,14 +3,14 @@ package com.yoger.productserviceorganization;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 
-import com.yoger.productserviceorganization.product.config.AwsProperties;
-import com.yoger.productserviceorganization.product.domain.model.ProductState;
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.DemoProductResponseDTO;
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.SimpleDemoProductResponseDTO;
-import java.io.IOException;
+import com.yoger.productserviceorganization.product.config.AwsProperties;
+import com.yoger.productserviceorganization.product.domain.model.ProductState;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
@@ -26,8 +26,9 @@ import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = LocalStackS3Config.class
 )
-@ActiveProfiles("integration")
+@ActiveProfiles({"integration", "aws"})
 @Testcontainers
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ProductServiceOrganizationApplicationTests {
 
     @Autowired
@@ -41,7 +42,7 @@ class ProductServiceOrganizationApplicationTests {
 
     private TestApplicationUtil applicationUtil;
 
-    @BeforeEach
+    @BeforeAll
     public void setUp() {
         // 버킷을 미리 생성
         s3TestClient.createBucket(CreateBucketRequest.builder().bucket(awsProperties.bucket()).build());
@@ -49,7 +50,7 @@ class ProductServiceOrganizationApplicationTests {
     }
 
     @Test
-    void whenPostRequestThenProductCreated() throws IOException {
+    void whenPostRequestThenProductCreated() {
         // Given
         MultipartBodyBuilder builder = applicationUtil.getTestBodyBuilder();
 
