@@ -6,6 +6,7 @@ import com.yoger.productserviceorganization.product.domain.exception.Insufficien
 import com.yoger.productserviceorganization.product.domain.exception.InvalidProductException;
 import com.yoger.productserviceorganization.product.domain.exception.InvalidStockException;
 import com.yoger.productserviceorganization.product.domain.exception.InvalidTimeSetException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,56 @@ public class ProductUnitTest {
                 50
         );
     }
+
+    @Test
+    void testUpdateToSellableStateSuccess() {
+        Product demoProduct = Product.of(
+                1L,
+                "Test Product",
+                null,
+                "Test Description",
+                "http://image.url",
+                "http://thumbnail.url",
+                ProductState.DEMO,
+                101L,
+                "Creator Name",
+                null,
+                0,
+                0
+        );
+
+        Product sellableProduct = Product.toSellableFrom(demoProduct, List.of(new PriceByQuantity(1, 100)),
+                LocalDate.MAX.atStartOfDay());
+
+        assertThat(demoProduct)
+                .usingRecursiveComparison()
+                .ignoringFieldsOfTypes(ProductState.class)
+                .ignoringFields("priceByQuantities", "dueDate")
+                .isEqualTo(sellableProduct);
+    }
+
+    @Test
+    void testUpdateToSellableStateFailure() {
+        Product sellableProduct = Product.of(
+                1L,
+                "Test Product",
+                List.of(new PriceByQuantity(1, 100)),
+                "Test Description",
+                "http://image.url",
+                "http://thumbnail.url",
+                ProductState.SELLABLE,
+                101L,
+                "Creator Name",
+                LocalDate.MAX.atStartOfDay(),
+                3,
+                3
+        );
+
+        assertThatThrownBy(() -> Product.toSellableFrom(sellableProduct, List.of(new PriceByQuantity(1, 100)),
+                LocalDate.MAX.atStartOfDay()))
+                .isInstanceOf(InvalidProductException.class);
+    }
+
 
     @Test
     void testDecreaseStockQuantitySuccess() {
