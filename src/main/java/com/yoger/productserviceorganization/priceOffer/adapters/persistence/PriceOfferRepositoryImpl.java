@@ -17,20 +17,17 @@ public class PriceOfferRepositoryImpl implements PriceOfferRepository {
     private final JpaPriceOfferRepository jpaPriceOfferRepository;
 
     @Override
-    @Transactional
     public void save(PriceOffer priceOffer) {
         jpaPriceOfferRepository.save(PriceOfferMapper.toEntityFrom(priceOffer));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<PriceOffer> findById(Long productId, Long companyId) {
         return jpaPriceOfferRepository.findById(new PriceOfferId(productId, companyId))
                 .map(PriceOfferMapper::toDomainFrom);
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<PriceOffer> findAllByProductId(Long productId) {
         return jpaPriceOfferRepository.findAllById_ProductId(productId)
                 .stream().map(PriceOfferMapper::toDomainFrom)
@@ -38,7 +35,6 @@ public class PriceOfferRepositoryImpl implements PriceOfferRepository {
     }
 
     @Override
-    @Transactional
     public void delete(Long productId, Long companyId) {
         jpaPriceOfferRepository.deleteById(new PriceOfferId(productId, companyId));
     }

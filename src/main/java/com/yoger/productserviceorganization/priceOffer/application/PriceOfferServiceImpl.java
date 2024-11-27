@@ -12,6 +12,7 @@ import com.yoger.productserviceorganization.priceOffer.mapper.PriceOfferMapper;
 import com.yoger.productserviceorganization.product.application.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,11 +35,13 @@ public class PriceOfferServiceImpl implements PriceOfferService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PriceOffersResponseDTO getAllByProductId(Long productId) {
         return PriceOffersResponseDTO.from(priceOfferRepository.findAllByProductId(productId));
     }
 
     @Override
+    @Transactional
     public void update(Long productId, Long companyId, PriceOfferRequestDTO priceOfferRequestDTO) {
         validateUpdatable(productId);
 
@@ -47,6 +50,7 @@ public class PriceOfferServiceImpl implements PriceOfferService {
     }
 
     @Override
+    @Transactional
     public void confirm(Long productId, Long creatorId, ConfirmOfferRequestDTO confirmOfferRequestDTO) {
         PriceOffer priceOffer = findById(productId, confirmOfferRequestDTO.companyId());
         priceOffer.confirm();
