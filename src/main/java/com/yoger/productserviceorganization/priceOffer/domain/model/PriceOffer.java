@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Getter;
 
 @Getter
-public final class PriceOffer {
+public class PriceOffer {
     private final Long productId;
     private final Long companyId;
     private final List<PriceByQuantity> priceByQuantities;
