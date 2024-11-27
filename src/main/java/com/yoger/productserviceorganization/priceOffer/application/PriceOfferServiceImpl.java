@@ -66,6 +66,7 @@ public class PriceOfferServiceImpl implements PriceOfferService {
     }
 
     @Override
+    @Transactional
     public void delete(Long productId, Long companyId) {
         validateUpdatable(productId);
         priceOfferRepository.delete(productId, companyId);
