@@ -6,8 +6,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.yoger.productserviceorganization.LocalStackS3Config;
 import com.yoger.productserviceorganization.product.adapters.s3.S3ImageStorageService;
 import com.yoger.productserviceorganization.product.config.AwsProperties;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.ClassPathResource;
@@ -26,8 +27,9 @@ import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 @SpringBootTest(
         classes = LocalStackS3Config.class
 )
-@ActiveProfiles("integration")
+@ActiveProfiles({"integration", "aws"})
 @Testcontainers
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class S3ServiceTests {
     @Autowired
     private S3Client s3TestClient;
@@ -40,7 +42,7 @@ public class S3ServiceTests {
     private static final String TEST_IMAGE_PATH = "test-image.jpeg";
     private static final String EXPECTED_URL_PATTERN = "https://test-bucket\\.s3\\.ap-northeast-2\\.amazonaws\\.com/[a-f0-9\\-]+_test-image\\.jpeg";
 
-    @BeforeEach
+    @BeforeAll
     void setUp() {
         s3Service = new S3ImageStorageService(s3TestClient, awsProperties);
         // 버킷을 미리 생성
