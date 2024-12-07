@@ -3,6 +3,7 @@ package com.yoger.productserviceorganization.product.application;
 import com.yoger.productserviceorganization.product.adapters.web.dto.request.DemoProductRequestDTO;
 import com.yoger.productserviceorganization.product.adapters.web.dto.request.UpdatedDemoProductRequestDTO;
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.DemoProductResponseDTO;
+import com.yoger.productserviceorganization.product.adapters.web.dto.response.partialRefundRequestDTO;
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.SellableProductResponseDTO;
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.SimpleDemoProductResponseDTO;
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.SimpleSellableProductResponseDTO;
@@ -15,7 +16,7 @@ import com.yoger.productserviceorganization.product.domain.port.ImageStorageServ
 import com.yoger.productserviceorganization.product.domain.port.ProductRepository;
 import com.yoger.productserviceorganization.product.mapper.ProductMapper;
 import jakarta.validation.Valid;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,13 +42,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional
-    public DemoProductResponseDTO saveDemoProduct(@Valid DemoProductRequestDTO demoProductRequestDTO) {
+    public DemoProductResponseDTO saveDemoProduct(Long creatorId, @Valid DemoProductRequestDTO demoProductRequestDTO) {
         String imageUrl = imageStorageService.uploadImage(demoProductRequestDTO.image());
         String thumbnailImageUrl = imageStorageService.uploadImage(demoProductRequestDTO.thumbnailImage());
 
         registerTransactionSynchronizationForImageDeletion(imageUrl, thumbnailImageUrl);
 
-        Product product = ProductMapper.toDomainFrom(demoProductRequestDTO, imageUrl, thumbnailImageUrl);
+        Product product = ProductMapper.toDomainFrom(creatorId, demoProductRequestDTO, imageUrl, thumbnailImageUrl);
         return DemoProductResponseDTO.from(productRepository.save(product));
     }
 
@@ -133,11 +134,11 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional
-    public void updateDemoToSellable(Long productId, Long creatorId, List<PriceByQuantity> priceByQuantities) {
+    public void updateDemoToSellable(Long productId, Long creatorId, List<PriceByQuantity> priceByQuantities, LocalDateTime dueDate) {
         Product demoProduct = productRepository.findById(productId);
         demoProduct.validateCreatorId(creatorId);
 
-        Product sellableProduct = Product.toSellableFrom(demoProduct, priceByQuantities, LocalDate.MAX.atStartOfDay());
+        Product sellableProduct = Product.toSellableFrom(demoProduct, priceByQuantities, dueDate);
         productRepository.save(sellableProduct);
     }
 
@@ -156,11 +157,40 @@ public class ProductServiceImpl implements ProductService {
     @Transactional
     public void changeSellableProductStock(Long productId, Integer quantity) {
         int flag = productRepository.updateStock(productId, quantity);
-        if(flag == 0) {
-            if(!productRepository.existsById(productId)) {
+        if (flag == 0) {
+            if (!productRepository.existsById(productId)) {
                 throw new InvalidProductException("존재하지 않는 상품에 대한 재고 변경 요청입니다.");
             }
             throw new InvalidStockException("상품이 판매가능 하지 않거나, 상품의 재고가 부족합니다.");
         }
+    }
+
+    @Override
+    public List<?> findSimpleDemoProductsByCreatorId(Long creatorId) {
+        return productRepository.findByCreatorId(creatorId)
+                .stream()
+                .map(product -> {
+                    if (product.getState().equals(ProductState.SELLABLE)) {
+                        return SimpleSellableProductResponseDTO.from(product);
+                    } else {
+                        return SimpleDemoProductResponseDTO.from(product);
+                    }
+                })
+                .toList();
+    }
+
+    @Override
+    public partialRefundRequestDTO updateSellableToSaleEnded(Long productId, Integer soldAmount) {
+        Product product = productRepository.findById(productId);
+        int originPrice = product.getPriceByQuantities().getFirst().price();
+        int finalPrice = originPrice;
+        for(PriceByQuantity priceByQuantity : product.getPriceByQuantities()) {
+            if(priceByQuantity.isLargerThenSoldAmount(soldAmount)) {
+                finalPrice = priceByQuantity.price();
+            }
+        }
+        Product saleEndedProduct = Product.toSaleEndedFrom(product, soldAmount, finalPrice);
+        productRepository.save(saleEndedProduct);
+        return new partialRefundRequestDTO(productId, originPrice, finalPrice);
     }
 }

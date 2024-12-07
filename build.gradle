@@ -20,11 +20,15 @@ configurations {
 }
 
 bootBuildImage {
-    imageName = 'haekwang/yoger-product-service-v3:latest'
+    imageName = 'haekwang/yoger-product-service-v2:latest'
 }
 
 repositories {
     mavenCentral()
+}
+
+bootRun {
+    systemProperty 'spring.profiles.active', 'testdata,aws'
 }
 
 dependencies {
@@ -34,6 +38,9 @@ dependencies {
     // AWS SDK for Java v2 BOM
     implementation platform('software.amazon.awssdk:bom:2.20.56')
     implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.8.3'
+
+    //implementation 'com.google.cloud.sql:mysql-socket-factory-connector-j-8:1.11.3'
+    implementation 'mysql:mysql-connector-java:8.0.33'
 
     // S3 client
     implementation 'software.amazon.awssdk:s3'

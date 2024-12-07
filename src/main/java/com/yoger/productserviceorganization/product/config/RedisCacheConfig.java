@@ -3,6 +3,9 @@ package com.yoger.productserviceorganization.product.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +17,15 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @EnableCaching
+@ConfigurationProperties(prefix = "spring.data.redis")
+@Getter @Setter
 public class RedisCacheConfig {
+    private String host;
+    private Integer port;
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory("127.0.0.1", 6379);
+        return new LettuceConnectionFactory(host, port);
     }
 
     @Bean

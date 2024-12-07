@@ -124,6 +124,14 @@ public class ProductRepositoryImpl implements ProductRepository {
         return jpaProductRepository.existsById(productId);
     }
 
+    @Override
+    public List<Product> findByCreatorId(Long creatorId) {
+        return jpaProductRepository.findAllByCreatorId(creatorId)
+                .stream()
+                .map(ProductMapper::toDomainFrom)
+                .toList();
+    }
+
     private void evictCacheForState(ProductState state) {
         String cacheKey = PRODUCT_ENTITY_CACHE_BY_STATE + " : " + state.name();
         redisTemplate.delete(cacheKey);
