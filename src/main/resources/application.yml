@@ -25,6 +25,9 @@ spring:
       port: 6379
       timeout: 1s
       password: ${REDIS_PASSWORD}
+  threads:
+    virtual:
+      enabled: true
 
 cloud:
   aws:

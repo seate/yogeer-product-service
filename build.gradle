@@ -40,7 +40,7 @@ dependencies {
     implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.8.3'
 
     //implementation 'com.google.cloud.sql:mysql-socket-factory-connector-j-8:1.11.3'
-    implementation 'mysql:mysql-connector-java:8.0.33'
+    implementation 'mysql:mysql-connector-java:9.+'
 
     // S3 client
     implementation 'software.amazon.awssdk:s3'
