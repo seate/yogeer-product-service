@@ -7,7 +7,6 @@ import com.yoger.productserviceorganization.product.adapters.web.dto.response.pa
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.SellableProductResponseDTO;
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.SimpleDemoProductResponseDTO;
 import com.yoger.productserviceorganization.product.adapters.web.dto.response.SimpleSellableProductResponseDTO;
-import com.yoger.productserviceorganization.product.domain.exception.InvalidProductException;
 import com.yoger.productserviceorganization.product.domain.exception.InvalidStockException;
 import com.yoger.productserviceorganization.product.domain.model.PriceByQuantity;
 import com.yoger.productserviceorganization.product.domain.model.Product;
@@ -177,6 +176,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public partialRefundRequestDTO updateSellableToSaleEnded(Long productId, Integer soldAmount) {
         Product product = productRepository.findById(productId);
         int originPrice = product.getPriceByQuantities().getFirst().price();
