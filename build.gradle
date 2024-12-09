@@ -40,7 +40,6 @@ dependencies {
     implementation 'io.hypersistence:hypersistence-utils-hibernate-63:3.8.3'
 
     //implementation 'com.google.cloud.sql:mysql-socket-factory-connector-j-8:1.11.3'
-    implementation 'mysql:mysql-connector-java:9.+'
 
     // S3 client
     implementation 'software.amazon.awssdk:s3'
@@ -63,7 +62,7 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
 
     // MySQL 드라이버
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'com.mysql:mysql-connector-j:9.+'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
