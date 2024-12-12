@@ -138,7 +138,7 @@ public class ProductServiceImpl implements ProductService {
         demoProduct.validateCreatorId(creatorId);
 
         Product sellableProduct = Product.toSellableFrom(demoProduct, priceByQuantities, dueDate);
-        productRepository.save(sellableProduct);
+        productRepository.updateForState(sellableProduct, ProductState.DEMO);
     }
 
 
@@ -187,7 +187,7 @@ public class ProductServiceImpl implements ProductService {
             }
         }
         Product saleEndedProduct = Product.toSaleEndedFrom(product, soldAmount, finalPrice);
-        productRepository.save(saleEndedProduct);
+        productRepository.updateForState(saleEndedProduct, ProductState.SELLABLE);
         return new partialRefundRequestDTO(productId, originPrice, finalPrice);
     }
 }

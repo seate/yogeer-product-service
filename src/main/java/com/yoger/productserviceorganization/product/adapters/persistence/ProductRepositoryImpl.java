@@ -53,6 +53,17 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public void updateForState(Product product, ProductState beforeState) {
+        ProductEntity productEntity = ProductMapper.toEntityFrom(product);
+        ProductEntity savedEntity = jpaProductRepository.save(productEntity);
+        String cacheKey = PRODUCT_ENTITY_CACHE + savedEntity.getId();
+        redisTemplate.opsForValue().set(cacheKey, savedEntity, Duration.ofMinutes(5));
+
+        evictCacheForState(beforeState);
+        evictCacheForState(product.getState());
+    }
+
+    @Override
     public List<Product> findByState(ProductState state) {
         String cacheKey = PRODUCT_ENTITY_CACHE_BY_STATE + state.name();
         List<ProductEntity> cachedEntities = (List<ProductEntity>) redisTemplate.opsForValue().get(cacheKey);

@@ -9,6 +9,8 @@ public interface ProductRepository {
 
     Product save(Product product);
 
+    void updateForState(Product product, ProductState beforeState);
+
     List<Product> findByState(ProductState state);
 
     void deleteById(Long productId);
