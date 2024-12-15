@@ -55,7 +55,7 @@ class ProductServiceOrganizationApplicationTests {
         MultipartBodyBuilder builder = applicationUtil.getTestBodyBuilder();
 
         // When
-        DemoProductResponseDTO demoProductResponseDTO = applicationUtil.makeDemoTestProduct(builder);
+        DemoProductResponseDTO demoProductResponseDTO = applicationUtil.makeDemoTestProduct(1L, builder);
 
         // Then
         String expectedImageUrlPattern = String.format(
@@ -91,7 +91,7 @@ class ProductServiceOrganizationApplicationTests {
         MultipartBodyBuilder builder = applicationUtil.getTestBodyBuilder();
 
         // First, create a demo product
-        DemoProductResponseDTO demoProductResponseDTO = applicationUtil.makeDemoTestProduct(builder);
+        DemoProductResponseDTO demoProductResponseDTO = applicationUtil.makeDemoTestProduct(1L, builder);
 
         // When
         List<SimpleDemoProductResponseDTO> demoProductResponseDTOs = applicationUtil.getSimpleDemoTestProducts();
@@ -121,7 +121,7 @@ class ProductServiceOrganizationApplicationTests {
         MultipartBodyBuilder builder = applicationUtil.getTestBodyBuilder();
 
         // First, create a demo product
-        DemoProductResponseDTO originDemoProductResponseDTO = applicationUtil.makeDemoTestProduct(builder);
+        DemoProductResponseDTO originDemoProductResponseDTO = applicationUtil.makeDemoTestProduct(1L, builder);
 
         MultipartBodyBuilder updateBuilder = new MultipartBodyBuilder();
         updateBuilder.part("image", new ClassPathResource("updated-image.jpeg"))
@@ -155,7 +155,7 @@ class ProductServiceOrganizationApplicationTests {
         MultipartBodyBuilder builder = applicationUtil.getTestBodyBuilder();
 
         // First, create a demo product
-        DemoProductResponseDTO demoProductResponseDTO = applicationUtil.makeDemoTestProduct(builder);
+        DemoProductResponseDTO demoProductResponseDTO = applicationUtil.makeDemoTestProduct(1L, builder);
 
         // When: Delete the created product
         applicationUtil.deleteDemoTestProduct(demoProductResponseDTO.id(), demoProductResponseDTO.creatorId());

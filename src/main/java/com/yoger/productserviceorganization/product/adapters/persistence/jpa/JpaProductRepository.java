@@ -15,10 +15,15 @@ public interface JpaProductRepository extends JpaRepository<ProductEntity, Long>
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT p FROM ProductEntity p WHERE p.id = :id")
-    Optional<ProductEntity> findByIdWithLock(Long id);
+    Optional<ProductEntity> findByIdWithLock(@Param("id") Long id);
 
     @Modifying
     @Query("UPDATE ProductEntity p SET p.stockQuantity = p.stockQuantity + :quantity " +
             "WHERE p.id = :id AND p.state = 'SELLABLE' AND p.stockQuantity + :quantity >= 0")
     Integer updateStock(@Param("id") Long id, @Param("quantity") Integer quantity);
+
+    List<ProductEntity> findAllByCreatorId(Long creatorId);
+
+    @Query("SELECT p.state FROM ProductEntity p WHERE p.id = :id")
+    Optional<ProductState> findStateById(@Param("id") Long id);
 }

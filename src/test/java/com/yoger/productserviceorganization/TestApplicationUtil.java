@@ -26,7 +26,6 @@ class TestApplicationUtil {
         builder.part("thumbnailImage", new ClassPathResource("test-thumbnail.jpeg"))
                 .filename("test-thumbnail.jpeg")
                 .contentType(MediaType.IMAGE_JPEG);
-        builder.part("creatorId", "1");  // Long 값으로 전송
         builder.part("creatorName", "Test Creator");  // 제작자 이름 추가
         return builder;
     }
@@ -41,9 +40,10 @@ class TestApplicationUtil {
                 .getResponseBody();
     }
 
-    DemoProductResponseDTO makeDemoTestProduct(MultipartBodyBuilder builder) {
+    DemoProductResponseDTO makeDemoTestProduct(Long creatorId, MultipartBodyBuilder builder) {
         return webTestClient.post()
                 .uri("/api/products/demo")
+                .header("User-Id", String.valueOf(creatorId))
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .exchange()
@@ -56,7 +56,7 @@ class TestApplicationUtil {
     DemoProductResponseDTO updateDemoTestProduct(Long id, Long creatorId, MultipartBodyBuilder builder) {
         return webTestClient.patch()
                 .uri("/api/products/demo/" + id)
-                .header("user-id", String.valueOf(creatorId))
+                .header("User-Id", String.valueOf(creatorId))
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(builder.build()))
                 .exchange()
@@ -69,7 +69,7 @@ class TestApplicationUtil {
     void deleteDemoTestProduct(Long productId, Long creatorId) {
         webTestClient.delete()
                 .uri("/api/products/demo/" + productId)
-                .header("user-id", String.valueOf(creatorId))
+                .header("User-Id", String.valueOf(creatorId))
                 .exchange()
                 .expectStatus().isNoContent()
                 .expectBody().isEmpty();
