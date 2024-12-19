@@ -2,12 +2,8 @@ package com.yoger.productserviceorganization.product.adapters.persistence.jpa;
 
 import static org.assertj.core.api.Assertions.*;
 
-import com.yoger.productserviceorganization.product.adapters.persistence.ProductRepositoryImpl;
 import com.yoger.productserviceorganization.product.config.DataConfig;
-import com.yoger.productserviceorganization.product.domain.exception.ProductNotFoundException;
-import com.yoger.productserviceorganization.product.domain.port.ProductRepository;
 import com.yoger.productserviceorganization.product.domain.model.PriceByQuantity;
-import com.yoger.productserviceorganization.product.domain.model.Product;
 import com.yoger.productserviceorganization.product.domain.model.ProductState;
 import jakarta.validation.ConstraintViolationException;
 import java.time.LocalDateTime;
@@ -26,16 +22,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 @DataJpaTest
-@Import({
-        DataConfig.class,
-        ProductRepositoryImpl.class
-})
+@Import(DataConfig.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("integration")
 public class ProductRepositoryJpaTests {
 
     @Autowired
-    private ProductRepository productRepository;
+    private JpaProductRepository productRepository;
 
     private List<PriceByQuantity> priceByQuantities;
 
@@ -51,7 +44,7 @@ public class ProductRepositoryJpaTests {
     @Test
     @DisplayName("상품들이 정상적으로 저장되었는 지 테스트")
     void findAllProducts() {
-        Product product1 = Product.of(
+        ProductEntity product1 = ProductEntity.of(
                 null,
                 "유효한상품이름1",
                 priceByQuantities,
@@ -65,7 +58,7 @@ public class ProductRepositoryJpaTests {
                 100, // initialStockQuantity
                 100 // stockQuantity
         );
-        Product product2 = Product.of(
+        ProductEntity product2 = ProductEntity.of(
                 null,
                 "유효한상품이름2",
                 priceByQuantities,
@@ -79,13 +72,13 @@ public class ProductRepositoryJpaTests {
                 200, // initialStockQuantity
                 200 // stockQuantity
         );
-        Product savedProduct1 = productRepository.save(product1);
-        Product savedProduct2 = productRepository.save(product2);
+        ProductEntity savedProduct1 = productRepository.save(product1);
+        ProductEntity savedProduct2 = productRepository.save(product2);
 
-        List<Product> actualProducts = productRepository.findAll();
+        List<ProductEntity> actualProducts = productRepository.findAll();
 
         assertThat(actualProducts)
-                .extracting(Product::getId)
+                .extracting(ProductEntity::getId)
                 .contains(savedProduct1.getId(), savedProduct2.getId());
     }
 
@@ -95,7 +88,7 @@ public class ProductRepositoryJpaTests {
     void productValidationFailTest(String name, String description, String imageUrl, ProductState state,
                                    String thumbnailImageUrl, Long creatorId, String creatorName,
                                    String expectedMessage) {
-        Product product = Product.of(
+        ProductEntity product = ProductEntity.of(
                 null,
                 name,
                 priceByQuantities,
@@ -183,7 +176,7 @@ public class ProductRepositoryJpaTests {
     @Test
     @DisplayName("상품이 정상적으로 삭제되는지 테스트")
     void deleteProduct() {
-        Product product = Product.of(
+        ProductEntity product = ProductEntity.of(
                 1L,
                 "유효한상품이름1",
                 priceByQuantities,
@@ -197,7 +190,7 @@ public class ProductRepositoryJpaTests {
                 100, // initialStockQuantity
                 100 // stockQuantity
         );
-        Product savedProduct = productRepository.save(product);
+        ProductEntity savedProduct = productRepository.save(product);
 
         // Ensure product exists before deletion
         assertThat(savedProduct.getName()).isEqualTo(product.getName());
@@ -205,9 +198,6 @@ public class ProductRepositoryJpaTests {
         // When: 상품을 삭제
         productRepository.deleteById(savedProduct.getId());
 
-        // Then: 삭제 후 상품이 존재하지 않는다는 예외 처리 확인
-        assertThatThrownBy(() -> productRepository.findById(savedProduct.getId()))
-                .isInstanceOf(ProductNotFoundException.class)
-                .hasMessage("Product not found with id : " + savedProduct.getId());
+        assertThat(productRepository.existsById(savedProduct.getId())).isEqualTo(false);
     }
 }

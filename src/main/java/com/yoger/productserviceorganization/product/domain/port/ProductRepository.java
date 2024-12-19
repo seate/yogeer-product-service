@@ -9,9 +9,9 @@ public interface ProductRepository {
 
     Product save(Product product);
 
-    List<Product> findByState(ProductState state);
+    void updateForState(Product product, ProductState beforeState);
 
-    List<Product> findAll();
+    List<Product> findByState(ProductState state);
 
     void deleteById(Long productId);
 
@@ -20,4 +20,6 @@ public interface ProductRepository {
     Integer updateStock(Long productId, Integer quantity);
 
     Boolean existsById(Long productId);
+
+    List<Product> findByCreatorId(Long creatorId);
 }
