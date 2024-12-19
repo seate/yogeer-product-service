@@ -28,9 +28,10 @@ public class DemoProductController {
 
     @PostMapping
     public ResponseEntity<DemoProductResponseDTO> saveDemo(
+            @RequestHeader(value = "User-Id") Long creatorId,
             @Valid @ModelAttribute DemoProductRequestDTO demoProductRequestDTO
     ) {
-        DemoProductResponseDTO savedDemoProduct = productService.saveDemoProduct(demoProductRequestDTO);
+        DemoProductResponseDTO savedDemoProduct = productService.saveDemoProduct(creatorId, demoProductRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedDemoProduct);
     }
 
@@ -49,7 +50,7 @@ public class DemoProductController {
     @PatchMapping("/{productId}")
     public ResponseEntity<DemoProductResponseDTO> updateDemoProduct(
             @PathVariable Long productId,
-            @RequestHeader(value = "user-id") Long creatorId,
+            @RequestHeader(value = "User-Id") Long creatorId,
             @Valid @ModelAttribute UpdatedDemoProductRequestDTO updatedDemoProductRequestDTO
     ) {
         DemoProductResponseDTO updatedProduct =
@@ -60,7 +61,7 @@ public class DemoProductController {
     @DeleteMapping("/{productId}")
     public ResponseEntity<String> deleteDemoProduct(
             @PathVariable Long productId,
-            @RequestHeader(value = "user-id") Long creatorId
+            @RequestHeader(value = "User-Id") Long creatorId
     ) {
         productService.deleteDemoProduct(productId, creatorId);
         return ResponseEntity.noContent().build();
